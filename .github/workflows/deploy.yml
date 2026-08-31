@@ -1,0 +1,113 @@
+# Audit — browser-only: no Python runtime, no Functions.
+# Checks: generated catalog drift + parity contract, then deploys.
+name: Audit checks & deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'audit_logic.js'
+      - 'catalog.js'
+      - 'kinds.js'
+      - 'palette.css'
+      - 'skus.json'
+      - 'sort.js'
+      - 'site.webmanifest'
+      - 'staticwebapp.config.json'
+      - 'tools/**'
+      - 'fixtures/**'
+      - '.github/workflows/deploy.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'audit_logic.js'
+      - 'catalog.js'
+      - 'kinds.js'
+      - 'palette.css'
+      - 'skus.json'
+      - 'sort.js'
+      - 'site.webmanifest'
+      - 'staticwebapp.config.json'
+      - 'tools/**'
+      - 'fixtures/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    name: Drift & parity
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with: { python-version: '3.13' }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: Catalog drift gate
+        run: python tools/sync_catalog.py --check
+      - name: Parity — browser analyzer
+        run: |
+          node tools/parity_runner.mjs fixtures/parity_fixtures.json /tmp/out.json
+          cat /tmp/out.json | python3 -c "import json,sys; d=json.load(open('/tmp/out.json')); print(f\"parity: {len(d)} fixtures\")"
+
+  deploy:
+    # SWA needs a secret; forks and Dependabot run without it — skip deploy cleanly rather than fail.
+    if: github.event_name != 'pull_request' || github.event.action != 'closed'
+    needs: checks
+    runs-on: ubuntu-latest
+    name: Build and deploy (audit.wantnot.nunan.com)
+    steps:
+      - uses: actions/checkout@v7
+        with: { submodules: false, lfs: false }
+
+      - name: Inject config.js from secret (audit app only)
+        env:
+          AUDIT_CLIENT_ID: ${{ secrets.AUDIT_CLIENT_ID }}
+        run: |
+          set -euo pipefail
+          if [ -z "${AUDIT_CLIENT_ID:-}" ]; then
+            echo "AUDIT_CLIENT_ID not set — leaving placeholder config.js (fork/Dependabot skips deploy)"
+          else
+            cat > config.js <<JSCONFIG
+          /* Generated at deploy — do not commit. WANTNOT_AUDIT_CLIENT_ID is a public identifier, not a secret; this app is a public client with no secret. */
+          window.WANTNOT_AUDIT_CLIENT_ID = '${AUDIT_CLIENT_ID}';
+          JSCONFIG
+            echo "config.js injected"
+          fi
+          grep -q "WANTNOT_AUDIT_CLIENT_ID" config.js || { echo "::error::config.js missing WANTNOT_AUDIT_CLIENT_ID"; exit 1; }
+
+      - name: Check assets present
+        run: |
+          set -euo pipefail
+          for f in index.html audit_logic.js catalog.js kinds.js palette.css sort.js site.webmanifest; do
+            test -f "$f" || { echo "::error::$f missing"; exit 1; }
+          done
+          # index.html must load config.js before the inline script (same trap as wantnot)
+          grep -Eq '<script[^>]+src=.?config[.]js' index.html || { echo "::error::index.html does not load config.js"; exit 1; }
+
+      - name: Deploy to Static Web Apps
+        id: swa
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_AUDIT }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: upload
+          app_location: '.'
+          skip_app_build: true
+          skip_deploy_on_missing_secrets: true
+
+  close_preview:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    name: Tear down PR preview
+    steps:
+      - uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_AUDIT }}
+          action: close

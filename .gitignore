@@ -1,0 +1,3 @@
+# Audit is static-only — no venv, no Functions artifacts
+.DS_Store
+Thumbs.db

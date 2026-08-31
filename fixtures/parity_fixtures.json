@@ -1,0 +1,178 @@
+{
+  "comment": "Shared fixtures for the browser/backend analyzer parity check. Each fixture is a Graph-shaped tenant identical to what shared/analyzer.analyze() and the ANALYZER block in dashboard/audit.html would see. Times are day-offsets relative to when the check runs, because the JS analyzer has no as_of and measures dormancy from Date.now(); absolute dates would make results drift with the wall clock. Prices are explicit so the comparison tests logic, not the two price tables' drift.",
+  "fixtures": [
+    {
+      "name": "basic",
+      "signInAvailable": true,
+      "dormantDays": 90,
+      "prices": { "SPE_E3": 36.0 },
+      "subscribed": [
+        {
+          "skuId": "e3a",
+          "skuPartNumber": "SPE_E3",
+          "prepaidUnits": { "enabled": 20, "suspended": 0, "warning": 0 },
+          "consumedUnits": 6,
+          "servicePlans": [
+            { "servicePlanId": "p1", "provisioningStatus": "Success" },
+            { "servicePlanId": "p2", "provisioningStatus": "Success" }
+          ]
+        }
+      ],
+      "users": [
+        { "displayName": "Active Amy", "upn": "amy@x.com", "enabled": true, "userType": "Member",
+          "createdDaysAgo": 800, "lastSigninDaysAgo": 1, "department": "Sales",
+          "assignments": ["e3a"] },
+        { "displayName": "Disabled Dan", "upn": "dan@x.com", "enabled": false, "userType": "Member",
+          "createdDaysAgo": 800, "lastSigninDaysAgo": 200, "department": "IT",
+          "assignments": ["e3a"] },
+        { "displayName": "Dormant Dora", "upn": "dora@x.com", "enabled": true, "userType": "Member",
+          "createdDaysAgo": 800, "lastSigninDaysAgo": 100, "department": "Sales",
+          "assignments": ["e3a"] },
+        { "displayName": "Never Ned", "upn": "ned@x.com", "enabled": true, "userType": "Member",
+          "createdDaysAgo": 300, "lastSigninDaysAgo": null, "department": "",
+          "assignments": ["e3a"] },
+        { "displayName": "New Nina", "upn": "nina@x.com", "enabled": true, "userType": "Member",
+          "createdDaysAgo": 5, "lastSigninDaysAgo": null, "department": "",
+          "assignments": ["e3a"] },
+        { "displayName": "Quiet Quinn", "upn": "quinn@x.com", "enabled": true, "userType": "Member",
+          "createdDaysAgo": 800, "lastSigninDaysAgo": 400, "lastNonInteractiveDaysAgo": 2,
+          "department": "", "assignments": ["e3a"] },
+        { "displayName": "Guest Gina", "upn": "gina@ext.com", "enabled": true, "userType": "Guest",
+          "createdDaysAgo": 800, "lastSigninDaysAgo": 400, "department": "",
+          "assignments": ["e3a"] }
+      ],
+      "deleted": []
+    },
+    {
+      "name": "redundant",
+      "signInAvailable": true,
+      "dormantDays": 90,
+      "prices": { "SPE_E3": 36.0, "EXCHANGESTANDARD": 4.0 },
+      "subscribed": [
+        {
+          "skuId": "e3a",
+          "skuPartNumber": "SPE_E3",
+          "prepaidUnits": { "enabled": 5, "suspended": 0, "warning": 0 },
+          "consumedUnits": 5,
+          "servicePlans": [
+            { "servicePlanId": "p1", "provisioningStatus": "Success" },
+            { "servicePlanId": "p2", "provisioningStatus": "Success" },
+            { "servicePlanId": "p3", "provisioningStatus": "Success" },
+            { "servicePlanId": "p4", "provisioningStatus": "Success" }
+          ]
+        },
+        {
+          "skuId": "ex1",
+          "skuPartNumber": "EXCHANGESTANDARD",
+          "prepaidUnits": { "enabled": 5, "suspended": 0, "warning": 0 },
+          "consumedUnits": 5,
+          "servicePlans": [
+            { "servicePlanId": "p4", "provisioningStatus": "Success" }
+          ]
+        }
+      ],
+      "users": [
+        { "displayName": "Redundant Rita", "upn": "rita@x.com", "enabled": true, "userType": "Member",
+          "createdDaysAgo": 800, "lastSigninDaysAgo": 1, "department": "Sales",
+          "assignments": ["e3a", "ex1"] }
+      ],
+      "deleted": []
+    },
+    {
+      "name": "collation",
+      "comment": "Two subscriptions of the same SKU. The backend emits ONE unassigned finding with summed seats; a per-subscription implementation emits two findings sharing a fingerprint, and a fingerprint-keyed delta engine silently drops one. This is the $3,024/yr regression from test_suite.py.",
+      "signInAvailable": true,
+      "dormantDays": 90,
+      "prices": { "SPE_E3": 36.0 },
+      "subscribed": [
+        {
+          "skuId": "e3a",
+          "skuPartNumber": "SPE_E3",
+          "prepaidUnits": { "enabled": 44, "suspended": 0, "warning": 0 },
+          "consumedUnits": 37,
+          "servicePlans": [{ "servicePlanId": "p1", "provisioningStatus": "Success" }]
+        },
+        {
+          "skuId": "e3b",
+          "skuPartNumber": "SPE_E3",
+          "prepaidUnits": { "enabled": 30, "suspended": 0, "warning": 0 },
+          "consumedUnits": 24,
+          "servicePlans": [{ "servicePlanId": "p1", "provisioningStatus": "Success" }]
+        }
+      ],
+      "users": [],
+      "deleted": []
+    },
+    {
+      "name": "deleted",
+      "comment": "A soft-deleted account holding a paid licence. Certain waste; distinct from disabled because nobody is coming back.",
+      "signInAvailable": true,
+      "dormantDays": 90,
+      "prices": { "SPE_E3": 36.0 },
+      "subscribed": [
+        {
+          "skuId": "e3a",
+          "skuPartNumber": "SPE_E3",
+          "prepaidUnits": { "enabled": 5, "suspended": 0, "warning": 0 },
+          "consumedUnits": 5,
+          "servicePlans": [{ "servicePlanId": "p1", "provisioningStatus": "Success" }]
+        }
+      ],
+      "users": [],
+      "deleted": [
+        { "displayName": "Deleted Dina", "upn": "dina@x.com", "userType": "Member",
+          "createdDaysAgo": 800, "department": "", "assignments": ["e3a"] }
+      ]
+    },
+    {
+      "name": "no_signin_data",
+      "comment": "Tenant without Entra ID P1/P2. Sign-in-based findings cannot be detected; the report must say so rather than silently produce a smaller number.",
+      "signInAvailable": false,
+      "dormantDays": 90,
+      "prices": { "SPE_E3": 36.0 },
+      "subscribed": [
+        {
+          "skuId": "e3a",
+          "skuPartNumber": "SPE_E3",
+          "prepaidUnits": { "enabled": 20, "suspended": 0, "warning": 0 },
+          "consumedUnits": 6,
+          "servicePlans": [{ "servicePlanId": "p1", "provisioningStatus": "Success" }]
+        }
+      ],
+      "users": [
+        { "displayName": "Dormant Dora", "upn": "dora@x.com", "enabled": true, "userType": "Member",
+          "createdDaysAgo": 800, "lastSigninDaysAgo": 200, "department": "",
+          "assignments": ["e3a"] },
+        { "displayName": "Disabled Dan", "upn": "dan@x.com", "enabled": false, "userType": "Member",
+          "createdDaysAgo": 800, "lastSigninDaysAgo": 200, "department": "",
+          "assignments": ["e3a"] }
+      ],
+      "deleted": []
+    },
+    {
+      "name": "unknown_sku",
+      "comment": "A SKU with no price on file must be excluded from totals and named in a warning, not guessed at zero or silently dropped.",
+      "signInAvailable": true,
+      "dormantDays": 90,
+      "prices": { "SPE_E3": 36.0 },
+      "subscribed": [
+        {
+          "skuId": "e3a",
+          "skuPartNumber": "SPE_E3",
+          "prepaidUnits": { "enabled": 5, "suspended": 0, "warning": 0 },
+          "consumedUnits": 2,
+          "servicePlans": [{ "servicePlanId": "p1", "provisioningStatus": "Success" }]
+        },
+        {
+          "skuId": "unk1",
+          "skuPartNumber": "SOMECUSTOMSKU",
+          "prepaidUnits": { "enabled": 3, "suspended": 0, "warning": 0 },
+          "consumedUnits": 2,
+          "servicePlans": [{ "servicePlanId": "u1", "provisioningStatus": "Success" }]
+        }
+      ],
+      "users": [],
+      "deleted": []
+    }
+  ]
+}

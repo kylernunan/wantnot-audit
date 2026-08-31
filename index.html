@@ -1,0 +1,1300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>WantNot Instant License Audit</title>
+<link rel="icon" href="/brand/favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="/brand/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="apple-touch-icon" href="/brand/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0C1017">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="WantNot">
+<meta property="og:title" content="WantNot Instant Audit">
+<meta property="og:description" content="Sign in as an administrator and see your Microsoft 365 licence waste in about a minute. Read-only, and nothing is stored.">
+<meta property="og:image" content="/brand/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="palette.css">
+<link rel="canonical" href="https://audit.wantnot.nunan.com/">
+<style>
+:root{
+  --page:#F1F3F7; --card:#FFF; --card-2:#F7F9FC; --line:#E4E9F0; --line-2:#EFF2F7;
+  --ink:#0C1017; --ink-2:#4C5765; --ink-3:#8A94A4; --keep:#1A212C; --hot:#FF4D2E; --good:#12A56B;
+  --k1:#FF4D2E; --k2:#FF7038; --k3:#FB9440; --k4:#DCAA4A; --k5:#B3A277; --k6:#8F9E86; --k7:#6F8C9B; /* fallback; palette.css is authoritative */
+  --shadow:0 1px 2px rgba(12,16,23,.04),0 8px 24px -12px rgba(12,16,23,.14);
+  --display:'Archivo',system-ui,sans-serif; --ui:'Instrument Sans',system-ui,sans-serif;
+  --r:16px; --r-sm:10px;
+}
+@media (prefers-color-scheme:dark){:root{
+  --page:#090B0F; --card:#12161D; --card-2:#171C25; --line:#232A35; --line-2:#1B212B;
+  --ink:#EDF1F7; --ink-2:#A3AEBC; --ink-3:#6C7684; --keep:#DDE4EC; --hot:#FF6647; --good:#2FCE8E;
+  --k1:#FF6647; --k2:#FF8654; --k3:#FCA659; --k4:#E4BB65; --k5:#C0B08A; --k6:#9DAF95; --k7:#7F9DAD; /* fallback; palette.css authoritative */
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px -14px rgba(0,0,0,.7);
+}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font-family:var(--ui);font-size:14px;
+     line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px 110px}
+@media(max-width:640px){.wrap{padding:0 16px 70px}}
+
+/* ── shared nav ───────────────────────────────────────────────────── */
+.brand{font-family:var(--display);font-weight:800;font-size:17px;font-stretch:118%;
+  letter-spacing:-.005em;text-transform:uppercase;display:flex;align-items:center;gap:9px;
+  color:var(--ink);text-decoration:none;white-space:nowrap;margin:0}
+.brand .glyph{width:28px;height:14px;border-radius:4px;
+  /* one bar with a slice out of it, matches brand/mark.svg exactly */
+  background:linear-gradient(90deg,var(--keep) 0 68%,transparent 68% 73%,var(--hot) 73% 100%)}
+.segs{display:flex;gap:3px;background:var(--card-2);border:1px solid var(--line);
+  border-radius:999px;padding:3px}
+.seg-link{font-size:13px;font-weight:600;padding:7px 15px;border-radius:999px;color:var(--ink-2);
+  text-decoration:none;transition:background .14s,color .14s;white-space:nowrap}
+.seg-link:hover{color:var(--ink)}
+.seg-link.active{background:var(--ink);color:var(--page)}
+.seg-link:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+@media(max-width:680px){.segs{width:100%;order:3}.seg-link{flex:1;text-align:center;padding:7px 6px;font-size:12px}}
+
+.topbar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;padding:20px 0 22px}
+.brand{justify-self:start}
+.segs{justify-self:center}
+.auth{justify-self:end;display:inline-flex;align-items:center;gap:10px}
+.auth .btn-signin{font:inherit;font-size:13px;font-weight:600;padding:8px 16px;border-radius:999px;background:var(--ink);color:var(--page);border:1px solid var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:opacity .13s;cursor:pointer}
+.auth .btn-signin:hover{opacity:.88}
+@media(max-width:720px){.topbar{grid-template-columns:1fr auto;grid-template-areas:"brand auth" "nav nav";gap:12px}.brand{grid-area:brand}.auth{grid-area:auth}.segs{grid-area:nav;justify-self:center;width:100%;justify-content:center}}
+.mark{font-family:var(--display);font-weight:800;font-size:17px;font-stretch:118%;
+      letter-spacing:-.005em;text-transform:uppercase;margin:0;display:flex;align-items:center;gap:9px}
+.mark .glyph{width:28px;height:14px;border-radius:4px;
+  /* one bar with a slice out of it, matches brand/mark.svg exactly */
+  background:linear-gradient(90deg,var(--keep) 0 68%,transparent 68% 73%,var(--hot) 73% 100%)}
+.grow{flex:1}
+.pill{font-size:11.5px;font-weight:500;color:var(--ink-2);background:var(--card);
+      border:1px solid var(--line);padding:4px 11px;border-radius:999px;
+      display:inline-flex;gap:7px;align-items:center}
+.pill .dot{width:6px;height:6px;border-radius:50%;background:var(--good)}
+.label{font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;
+       color:var(--ink-3);margin:0 0 10px}
+h1.big{font-family:var(--display);font-weight:700;font-size:clamp(28px,5vw,42px);
+       font-stretch:104%;letter-spacing:-.03em;line-height:1.08;margin:0 0 14px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+       box-shadow:var(--shadow);padding:32px}
+@media(max-width:640px){.panel{padding:22px 18px}}
+.lede{color:var(--ink-2);max-width:58ch;margin:0 0 26px;font-size:15px}
+.btn{font:inherit;font-size:14px;font-weight:600;padding:11px 20px;border-radius:10px;
+     cursor:pointer;background:var(--ink);color:var(--page);border:1px solid var(--ink);
+     transition:opacity .13s,transform .08s}
+.btn:hover{opacity:.88}.btn:active{transform:translateY(1px)}
+.btn.ghost{background:var(--card);color:var(--ink);border-color:var(--line)}
+.btn:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.btn.sm{font-size:13px;padding:9px 16px}
+.promise{display:grid;gap:12px;margin:0 0 28px;padding:0;list-style:none}
+.promise li{display:flex;gap:11px;align-items:flex-start;color:var(--ink-2);font-size:13.5px}
+.promise .tick{color:var(--good);font-weight:700;flex:none}
+.scopes{background:var(--card-2);border:1px solid var(--line-2);border-radius:var(--r-sm);
+        padding:16px 18px;margin:0 0 26px}
+.scopes table{width:100%;border-collapse:collapse;font-size:12.5px}
+.scopes td{padding:4px 0;vertical-align:top}
+.scopes td:first-child{font-weight:600;white-space:nowrap;padding-right:16px}
+.scopes td:last-child{color:var(--ink-3)}
+.hero-figure{font-family:var(--display);font-weight:700;font-size:clamp(40px,7.5vw,68px);
+  font-stretch:96%;letter-spacing:-.035em;line-height:1;color:var(--hot);
+  font-variant-numeric:tabular-nums;margin:0}
+.hero-figure .cur{font-size:.44em;vertical-align:.52em;margin-right:.1em}
+.hero-sub{margin:12px 0 26px;color:var(--ink-2);max-width:56ch;font-size:13.5px}
+.hero-sub b{color:var(--ink);font-weight:600}
+.spendbar{display:flex;height:56px;border-radius:12px;overflow:hidden;background:var(--card-2);gap:3px}
+.spendbar .keep{background:var(--keep);border-radius:10px 3px 3px 10px;display:flex;
+  align-items:center;padding:0 16px;min-width:0}
+.spendbar .keep span{font-size:11.5px;font-weight:600;color:var(--card);opacity:.82;
+  white-space:nowrap;overflow:hidden}
+@media(prefers-color-scheme:dark){.spendbar .keep span{color:#0B0E13}}
+.spendbar .seg:last-child{border-radius:3px 10px 10px 3px}
+.axis{display:flex;justify-content:space-between;margin-top:11px;font-size:11.5px;color:var(--ink-3)}
+.axis b{color:var(--ink-2);font-weight:600}
+
+/* ── carve bar highlighting ───────────────────────────────────────── */
+.spendbar .seg{cursor:pointer;
+  transition:transform .18s cubic-bezier(.3,.9,.4,1),opacity .18s,filter .18s}
+.spendbar .keep{transition:opacity .18s}
+/* Dim the rest rather than only brightening one, the smallest band can be
+   under 1% of the bar, where brightening alone is invisible. */
+.spendbar.focused .seg:not(.on){opacity:.22;filter:saturate(.35)}
+.spendbar.focused .keep{opacity:.3}
+.spendbar .seg.on{transform:translateY(-6px);
+  box-shadow:0 8px 18px -6px rgba(0,0,0,.45);z-index:2}
+.spendbar .seg:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.legend-item{cursor:pointer;transition:border-color .15s,transform .15s}
+.legend-item:hover{border-color:var(--ink-3)}
+.legend-item.on{border-color:currentColor;transform:translateY(-1px)}
+.legend-item:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+.axis{min-height:20px}
+.axis .detail{display:flex;gap:10px;align-items:baseline;width:100%}
+.axis .detail .sw{width:9px;height:9px;border-radius:3px;flex:none;align-self:center}
+.axis .detail .pct{margin-left:auto;color:var(--ink-3)}
+
+
+
+
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.legend-item{display:inline-flex;align-items:center;gap:8px;background:var(--card-2);
+  border:1px solid var(--line-2);border-radius:999px;padding:5px 13px 5px 9px;font-size:12.5px}
+.legend-item .sw{width:9px;height:9px;border-radius:3px;flex:none}
+.legend-item .v{color:var(--ink-2);font-variant-numeric:tabular-nums}
+.stats{display:flex;gap:34px;flex-wrap:wrap;margin-top:24px;padding-top:22px;
+       border-top:1px solid var(--line-2)}
+.stat .k{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.stat .v{font-family:var(--display);font-weight:600;font-size:21px;letter-spacing:-.02em;
+         font-variant-numeric:tabular-nums;margin-top:2px}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin:34px 0 14px;flex-wrap:wrap}
+.tscroll{overflow-x:auto;background:var(--card);border:1px solid var(--line);
+         border-radius:var(--r);box-shadow:var(--shadow)}
+table.data{width:100%;border-collapse:collapse;min-width:640px}
+table.data thead th{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--ink-3);text-align:left;padding:11px 20px;white-space:nowrap;
+  border-bottom:1px solid var(--line-2);background:var(--card-2)}
+/* Import panel. Visually secondary to the sign-in button above it: this is the
+   fallback for an admin who will not consent, not the headline path. */
+.imp{margin-top:30px;padding-top:24px;border-top:1px solid var(--line)}
+.imp-h{font-family:var(--display);font-weight:700;font-size:16px;margin:0 0 6px}
+.imp-steps{margin:0 0 16px;padding-left:20px;font-size:13px;color:var(--ink-2);line-height:1.65}
+.imp-steps li{margin-bottom:5px}
+.imp-files{display:flex;gap:22px;flex-wrap:wrap;margin-bottom:16px}
+/* Block, not column-flex: the caption and its badge are separate nodes, and as
+   flex items they stacked and stretched the badge across the column. */
+.imp-files label{display:block;font-size:12px;font-weight:600}
+.imp-files input[type=file]{display:block;margin-top:7px;font:inherit;
+  font-weight:400;font-size:12px;max-width:100%}
+.imp .req,.imp .opt{font-weight:600;font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+  padding:2px 7px;border-radius:999px;margin-left:6px}
+.imp .req{background:color-mix(in srgb,var(--hot) 14%,transparent);color:var(--hot)}
+.imp .warn{display:block;margin-top:6px;color:var(--k4)}
+.imp .opt{background:var(--card-2);color:var(--ink-3)}
+table.data tbody td{padding:12px 20px;border-bottom:1px solid var(--line-2)}
+table.data tbody tr:last-child td{border-bottom:none}
+/* Bottom line. Totals are summed from raw values, never from the rounded
+   strings in the cells, and a truncated table states the listed subset and the
+   full total separately, a total covering only the rows that fit disproves
+   the headline rather than proving it. */
+table.data tfoot td{padding:13px 20px;border-top:2px solid var(--ink);
+  background:var(--card-2);vertical-align:middle}
+table.data tfoot tr.sub td{border-top:1px solid var(--line-2);padding:8px 20px;
+  font-size:12px;color:var(--ink-2);background:var(--card)}
+table.data tfoot .lbl{font-weight:600}
+table.data tfoot .big{font-family:var(--display);font-weight:700;font-size:17px;
+  font-variant-numeric:tabular-nums}
+table.data tfoot .recon{display:block;font-size:11px;font-weight:400;
+  color:var(--ink-3);margin-top:2px}
+.r{text-align:right}
+.nm{font-weight:600}
+.sub{font-size:12px;color:var(--ink-3)}
+.money{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+.money.hot{color:var(--hot)}
+.badge{font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap;
+       border:1px solid transparent;display:inline-block}
+.badge.certain{background:color-mix(in srgb,var(--k1) 14%,transparent);color:var(--k1);
+  border-color:color-mix(in srgb,var(--k1) 28%,transparent)}
+.badge.high{background:color-mix(in srgb,var(--k3) 15%,transparent);color:var(--k3);
+  border-color:color-mix(in srgb,var(--k3) 30%,transparent)}
+.badge.review{background:var(--card-2);color:var(--ink-3);border-color:var(--line)}
+.notice{display:flex;gap:12px;align-items:flex-start;font-size:13px;
+  background:color-mix(in srgb,var(--k4) 11%,var(--card));
+  border:1px solid color-mix(in srgb,var(--k4) 32%,transparent);
+  border-radius:var(--r-sm);padding:13px 16px;margin-top:14px;color:var(--ink-2)}
+.notice.err{background:color-mix(in srgb,var(--hot) 10%,var(--card));
+  border-color:color-mix(in srgb,var(--hot) 32%,transparent)}
+.notice .m{color:var(--k3);font-weight:700;flex:none}
+.notice.err .m{color:var(--hot)}
+.prog{margin-top:22px}
+.prog .bar{height:6px;border-radius:999px;background:var(--line-2);overflow:hidden}
+.prog .bar i{display:block;height:100%;background:var(--hot);width:0;transition:width .3s;
+  border-radius:999px}
+.prog .step{font-size:13px;color:var(--ink-2);margin-top:11px;font-variant-numeric:tabular-nums}
+table.data tbody tr.grp-head{cursor:pointer;transition:background .13s}
+table.data tbody tr.grp-head:hover{background:var(--card-2)}
+table.data tbody tr.grp-head:focus-visible{outline:2px solid var(--hot);outline-offset:-2px}
+table.data tbody tr.grp-head .nm{font-weight:700}
+table.data tbody tr.grp-item td{border-bottom-color:var(--line-2)}
+.hidden{display:none!important}
+@keyframes rise{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.rise{animation:rise .34s cubic-bezier(.22,.9,.3,1) backwards}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="https://wantnot.nunan.com/"><span class="glyph" aria-hidden="true"></span>WantNot</a>
+    <div class="segs">
+      <a class="seg-link" href="https://wantnot.nunan.com/">Home</a>
+      <a class="seg-link" href="https://wantnot.nunan.com/method">Method</a>
+      <a class="seg-link" href="https://wantnot.nunan.com/pricing">Pricing</a>
+      <a class="seg-link" href="https://wantnot.nunan.com/dashboard">Dashboard</a>
+      <a class="seg-link active" href="/" aria-current="page">Instant Audit</a>
+    </div>
+    <div class="auth"><a class="btn-signin" href="/dashboard">Customer Sign-in</a><span id="who" style="margin-left:10px"></span></div>
+  </header>
+  <main id="view" aria-live="polite"></main>
+</div>
+
+<script src="config.js" onerror="window.__noConfig=true"></script>
+<script src="sort.js"></script>
+<script src="catalog.js"></script>
+<script src="kinds.js"></script>
+<script src="audit_logic.js"></script>
+<script>
+/* ══════════════════════════════════════════════════════════════════════
+   WantNot Instant Audit (browser-only)
+
+   Runs entirely in the visitor's browser. Signs the customer's admin in
+   with OIDC / auth-code + PKCE, calls Microsoft Graph directly with
+   DELEGATED permissions, and analyses the result client-side.
+
+   No backend. No client secret (PKCE means a public client needs none).
+   No database. Nothing is transmitted anywhere except between the
+   visitor's browser and Microsoft.
+
+   That last property is the entire point: it removes the biggest
+   objection in this product ("you want read access to our directory?")
+   because there is no server on our side that could retain anything.
+
+   What it CANNOT do, by construction: a delegated token only exists
+   while someone is signed in. So no scheduled scans, no history, no
+   scan-over-scan deltas, no multi-tenant portfolio. Those need the
+   app-only backend.
+   ══════════════════════════════════════════════════════════════════════ */
+
+const MSAL_CDNS = [
+  'https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js',
+  'https://cdn.jsdelivr.net/npm/@azure/msal-browser@2.38.3/lib/msal-browser.min.js'
+];
+const GRAPH = 'https://graph.microsoft.com/v1.0';
+const SCOPES = [
+  'https://graph.microsoft.com/Organization.Read.All',
+  'https://graph.microsoft.com/User.Read.All',
+  'https://graph.microsoft.com/AuditLog.Read.All'
+];
+
+/* ═════════════════════ ANALYZER START ═════════════════════
+/* Now imported via audit_logic.js — see dashboard/audit_logic.js (single source with shared/analyzer.py) */
+/* ═════════════════════ ANALYZER END ═════════════════════ */
+
+/* KINDS now in kinds.js (single source); inline is fallback for file:// */
+var KINDS = (typeof KINDS !== 'undefined' && KINDS) ? KINDS : (typeof KINDS_SHARED !== 'undefined' ? KINDS_SHARED : {
+  unassigned_seats:['Unassigned seats','--k1'], disabled_user:['Disabled accounts','--k2'],
+  dormant_user:['Dormant users','--k3'], never_signed_in:['Never signed in','--k4'],
+  redundant_sku:['Redundant licenses','--k5'],
+  deleted_user:['Deleted accounts','--k6']
+});
+if (typeof KINDS_SHARED !== 'undefined') KINDS = KINDS_SHARED;
+var ORDER = (typeof ORDER_SHARED !== 'undefined') ? ORDER_SHARED : Object.keys(KINDS);
+const CONF = {certain:'Certain', high:'Likely', review:'Review'};
+const kLabel = k => (KINDS[k]||[k])[0];
+const kVar = k => `var(${(KINDS[k]||[null,'--ink-3'])[1]})`;
+const usd0 = n => '$'+Math.round(n||0).toLocaleString('en-US');
+const usd2 = n => '$'+(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const int = n => Number(n||0).toLocaleString('en-US');
+const compact = n => n>=1e6 ? '$'+(n/1e6).toFixed(2)+'M' : n>=1e4 ? '$'+Math.round(n/1e3)+'K' : usd0(n);
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const view = () => document.getElementById('view');
+
+
+
+/* ── MSAL ─────────────────────────────────────────────────────────── */
+let msalApp = null, account = null, lastResult = null, tenantName = '';
+
+function loadScript(srcs, timeoutMs = 12000){
+  return new Promise((resolve,reject)=>{
+    let i = 0;
+    const tryNext = () => {
+      if(i >= srcs.length){
+        return reject(new Error(
+          'Could not load the Microsoft sign-in library. A network policy or content '+
+          'blocker may be blocking alcdn.msauth.net.'));
+      }
+      const s = document.createElement('script');
+      let settled = false;
+      // A blocked CDN can hang without ever firing onerror, which would leave
+      // the page blank forever. Time out and fall through instead.
+      const timer = setTimeout(()=>{ if(!settled){ settled = true; s.remove(); tryNext(); } }, timeoutMs);
+      const done = fn => () => { if(settled) return; settled = true; clearTimeout(timer); fn(); };
+      s.src = srcs[i++];
+      s.onload = done(resolve);
+      s.onerror = done(tryNext);
+      document.head.appendChild(s);
+    };
+    tryNext();
+  });
+}
+
+/* Authority resolution.
+
+   Default is /organizations: any work or school tenant, personal Microsoft
+   accounts refused. That is correct for real customers. A personal account
+   has no directory, no licenses and nothing to audit.
+
+   An override exists for one case: a personal Microsoft account that is the
+   administrator of an Entra tenant (e.g. the "Default Directory" created when
+   you sign up for Azure with an MSA). /organizations rejects that identity by
+   home realm, but the tenant-specific endpoint accepts it. Useful for testing
+   your own directory; not something to hand a prospect.
+
+   Precedence: ?tenant=<guid> on the URL, then config.js, then /organizations. */
+function resolveAuthority(){
+  const q = new URLSearchParams(location.search).get('tenant');
+  const t = (q || window.WANTNOT_AUDIT_TENANT || '').trim();
+  if(!t) return { url:'https://login.microsoftonline.com/organizations', pinned:null };
+  if(!/^[0-9a-f-]{36}$|^[\w.-]+\.[\w.-]+$/i.test(t)){
+    throw new Error('That tenant value is not a valid tenant ID or domain name.');
+  }
+  return { url:'https://login.microsoftonline.com/'+encodeURIComponent(t), pinned:t };
+}
+
+let AUTHORITY = { url:'https://login.microsoftonline.com/organizations', pinned:null };
+
+async function initMsal(){
+  const clientId = (window.WANTNOT_AUDIT_CLIENT_ID||'').trim();
+  if(!clientId) throw new Error('NO_CONFIG');
+  AUTHORITY = resolveAuthority();
+  await loadScript(MSAL_CDNS);
+  msalApp = new msal.PublicClientApplication({
+    auth:{
+      clientId,
+      authority: AUTHORITY.url,
+      // A pinned tenant is not in MSAL's default trusted list, so it has to be
+      // declared explicitly or MSAL refuses the authority outright.
+      knownAuthorities: AUTHORITY.pinned ? ['login.microsoftonline.com'] : [],
+      redirectUri: location.origin + location.pathname
+    },
+    cache:{ cacheLocation:'sessionStorage', storeAuthStateInCookie:false }
+  });
+  // MSAL v3 requires an explicit initialize(); v2 does not have it.
+  if(typeof msalApp.initialize === 'function') await msalApp.initialize();
+  const resp = await msalApp.handleRedirectPromise().catch(()=>null);
+  if(resp && resp.account) account = resp.account;
+  else account = msalApp.getAllAccounts()[0] || null;
+}
+
+async function getToken(){
+  const req = { scopes: SCOPES, account };
+  try { return (await msalApp.acquireTokenSilent(req)).accessToken; }
+  catch { return (await msalApp.acquireTokenPopup(req)).accessToken; }
+}
+
+async function signIn(){
+  const req = { scopes: SCOPES, prompt:'select_account' };
+  try{
+    const r = await msalApp.loginPopup(req);
+    account = r.account;
+  }catch(e){
+    // Popup blocked or third-party cookies disabled, fall back to redirect.
+    if(/popup_window_error|user_cancelled|BrowserAuthError/i.test(e.errorCode||e.message||'')){
+      if(/user_cancelled/i.test(e.errorCode||'')) throw e;
+      return msalApp.loginRedirect(req);
+    }
+    throw e;
+  }
+}
+
+/* ── Graph ────────────────────────────────────────────────────────── */
+async function gfetch(url, token, headers){
+  for(let attempt=0; attempt<5; attempt++){
+    const r = await fetch(url, {headers:{Authorization:'Bearer '+token, Accept:'application/json', ...(headers||{})}});
+    if(r.status === 429 || r.status >= 500){
+      const wait = parseInt(r.headers.get('Retry-After')||'',10) || Math.min(2**attempt,30);
+      await new Promise(res=>setTimeout(res, wait*1000));
+      continue;
+    }
+    if(!r.ok){
+      let code='unknown', message=r.statusText;
+      try{ const j = await r.json(); code=(j.error||{}).code||code; message=(j.error||{}).message||message; }catch{}
+      const err = new Error(message); err.status=r.status; err.code=code; throw err;
+    }
+    return r.json();
+  }
+  throw new Error('Microsoft Graph kept throttling the request. Try again shortly.');
+}
+
+async function gpage(path, token, headers, onProgress){
+  let url = path.startsWith('http') ? path : GRAPH+path;
+  const out = [];
+  while(url){
+    const page = await gfetch(url, token, headers);
+    out.push(...(page.value||[]));
+    if(onProgress) onProgress(out.length);
+    url = page['@odata.nextLink'];
+  }
+  return out;
+}
+
+/* Only what a finding needs. `id` and `userType` were requested and read by
+   nothing. An object id is a durable directory identifier, so fetching one for
+   no purpose is the same mistake the CSV importer avoids. `department` is here
+   because findings now carry it, so the live path attributes the same way an
+   imported one does. Narrow the $select and Graph returns less. */
+const USER_SELECT = 'displayName,userPrincipalName,accountEnabled,createdDateTime,assignedLicenses,department';
+
+async function runAudit(setStep){
+  const token = await getToken();
+
+  setStep('Reading organisation details…', 5);
+  const orgs = await gpage('/organization?$select=id,displayName,verifiedDomains', token);
+  tenantName = (orgs[0]||{}).displayName || 'Your tenant';
+
+  setStep('Reading license inventory…', 15);
+  const subscribed = await gpage('/subscribedSkus', token);
+
+  setStep('Reading users…', 25);
+  let users, signInAvailable = true;
+  const hdr = {ConsistencyLevel:'eventual'};
+  try{
+    users = await gpage(`/users?$select=${USER_SELECT},signInActivity&$top=999`, token, hdr,
+      n => setStep(`Reading users… ${int(n)}`, Math.min(85, 25+n/40)));
+  }catch(e){
+    if(e.status !== 403) throw e;
+    // No Entra ID Premium, or the signed-in user lacks a directory role that
+    // can read audit data. Degrade rather than fail the whole audit.
+    signInAvailable = false;
+    setStep('Sign-in data unavailable, continuing without it…', 40);
+    users = await gpage(`/users?$select=${USER_SELECT}&$top=999`, token, hdr,
+      n => setStep(`Reading users… ${int(n)}`, Math.min(85, 40+n/40)));
+  }
+
+  setStep('Analysing…', 92);
+  const result = analyze(subscribed, users, signInAvailable);
+  result.tenant_name = tenantName;
+  return result;
+}
+
+/* ── Views ────────────────────────────────────────────────────────── */
+function renderSetup(){
+  document.getElementById('who').innerHTML = '';
+  view().innerHTML = `
+    <div class="panel rise">
+      <h1 class="big">Not configured yet</h1>
+      <p class="lede">This page needs the client ID of the audit app registration.
+        Run <code>infra/05-audit-app.sh</code>, which creates a delegated-only,
+        secret-less app registration and writes <code>dashboard/config.js</code>.</p>
+      <div class="notice"><span class="m">!</span><div>
+        Deploy again after that script runs, so <code>config.js</code> ships with the site.
+      </div></div>
+    </div>`;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   Import from Microsoft 365 admin center exports
+
+   The consent screen is the hardest step in this product. An admin who will
+   not grant Organization.Read.All to an unverified publisher will happily
+   click "Export users" in a portal they already trust, so this path reaches
+   the same numbers with no consent, no app registration and no tokens.
+
+   It feeds the analyzer above rather than reimplementing any of it, so an
+   imported audit and a live one are the same code producing the same
+   findings. Parsing happens here in the tab; nothing is uploaded, which is
+   the same promise the live path makes.
+
+   What an export cannot carry is stated rather than quietly omitted:
+   service plans are absent from every CSV, so redundant-SKU detection is
+   impossible on imported data. The analyzer already refuses to guess when
+   plan sets are empty, so that degrades correctly on its own.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* RFC 4180 enough for real exports: quoted fields, embedded commas, doubled
+   quotes, CRLF, and the BOM Excel puts on the front of everything.
+
+   Streams a row at a time and keeps nothing. Delimiters can only be found by
+   walking every character, so every field is necessarily *seen*, but only the
+   allowlisted ones are ever retained. */
+function eachCsvRow(text, onRow){
+  const s = String(text || '').replace(/^﻿/, '');
+  let row = [], field = '', q = false;
+  for(let i = 0; i < s.length; i++){
+    const c = s[i];
+    if(q){
+      if(c === '"'){ if(s[i+1] === '"'){ field += '"'; i++; } else q = false; }
+      else field += c;
+    } else if(c === '"'){ q = true; }
+    else if(c === ','){ row.push(field); field = ''; }
+    else if(c === '\r'){ /* handled by the \n that follows */ }
+    else if(c === '\n'){ row.push(field); onRow(row); row = []; field = ''; }
+    else field += c;
+  }
+  if(field.length || row.length){ row.push(field); onRow(row); }
+}
+
+/* Read a CSV keeping ONLY the columns named in `spec`.
+   A users export routinely carries forty-odd columns, proxy addresses, object
+   ids, phone numbers, postal addresses, licence GUIDs. None of that is needed
+   to price a licence, so none of it is retained: the row array is transient and
+   only allowlisted values are copied out of it.
+
+   Object ids in particular are read by nothing. Findings are keyed on UPN and
+   SKU part number, so an id would be a durable directory identifier ingested
+   for no purpose. */
+function readProjected(text, spec){
+  let headers = null, idx = null, ignored = [];
+  const rows = [];
+  eachCsvRow(text, raw => {
+    if(headers === null){
+      headers = raw.map(h => String(h).trim());
+      idx = {};
+      const claimed = new Set();
+      for(const [field, want] of Object.entries(spec)){
+        /* `{all: /re/}` claims every header that matches, not just the first.
+           The active-users report spreads activity across one column per
+           service, Exchange, OneDrive, Teams, with no combined column, so a
+           single-column field would find nothing and drop dormancy. */
+        if(want && want.all){
+          const hits = headers.filter(h => h && want.all.test(h));
+          idx[field] = hits.map(h => headers.indexOf(h));
+          hits.forEach(h => claimed.add(h));
+        } else {
+          const h = findCol(headers, want);
+          idx[field] = h === null ? -1 : headers.indexOf(h);
+          if(h !== null) claimed.add(h);
+        }
+      }
+      ignored = headers.filter(h => h && !claimed.has(h));
+      return;
+    }
+    if(!raw.some(v => String(v).trim() !== '')) return;
+    const o = {};
+    for(const field in idx){
+      const i = idx[field];
+      o[field] = Array.isArray(i) ? i.map(j => String(raw[j] ?? '').trim())
+               : i < 0 ? '' : String(raw[i] ?? '').trim();
+    }
+    rows.push(o);   // raw is dropped here; nothing outside the allowlist survives
+  });
+  headers = headers || [];
+  const present = {};
+  for(const [k, v] of Object.entries(idx || {})) present[k] = Array.isArray(v) ? v.length > 0 : v >= 0;
+  return { rows, headers, ignored, present };
+}
+
+/* Header names differ by admin centre, by locale and by which export button
+   was pressed, so match on a squashed form rather than an exact string. */
+const normHead = h => String(h || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+function findCol(headers, aliases){
+  const norm = headers.map(h => [normHead(h), h]);
+  for(const a of aliases.map(normHead)){
+    const hit = norm.find(([n]) => n === a);
+    if(hit) return hit[1];
+  }
+  // Fall back to a prefix match, which catches "Last sign-in date (UTC)".
+  for(const a of aliases.map(normHead)){
+    const hit = norm.find(([n]) => n.startsWith(a));
+    if(hit) return hit[1];
+  }
+  return null;
+}
+
+/* Exports name licences the way a human reads them. Reverse the catalogue so
+   "Microsoft 365 E3" resolves to SPE_E3; accept the part number too, because
+   some exports carry that instead. */
+const PART_BY_LABEL = (() => {
+  const m = {};
+  for(const [part, [name]] of Object.entries(SKU_CATALOG)){
+    m[normHead(name)] = part;
+    m[normHead(part)] = part;
+  }
+  return m;
+})();
+
+/* Products Microsoft renamed, where the new name is not a variation of the old
+   one and no amount of normalising gets there. All of these came back from a
+   real tenant export.
+
+   "Planner and Project Plan 3" is the current name for Project Plan 3, a
+   priced SKU, so missing it understated a real figure rather than dropping
+   something free. */
+const SKU_ALIASES = Object.fromEntries(Object.entries({
+  'Planner and Project Plan 1': 'PROJECTESSENTIALS',
+  'Planner and Project Plan 3': 'PROJECTPROFESSIONAL',
+  'Planner and Project Plan 5': 'PROJECTPREMIUM',
+  'Microsoft Defender for Office 365 (Plan 1)': 'ATP_ENTERPRISE',
+  'Microsoft Defender for Office 365 (Plan 2)': 'THREAT_INTELLIGENCE',
+  'Microsoft Fabric (Free)': 'POWER_BI_STANDARD',
+}).map(([k, v]) => [normHead(k), v]));
+
+/* An export writes names differently from the licensing reference: it prefixes
+   "Microsoft ", and marks trials and superseded SKUs in the name itself. Rather
+   than enumerate every combination, try the label as written and then strip
+   those decorations. A stripped form is only accepted if it actually resolves,
+   so this widens what is recognised without inventing matches. */
+function resolveSku(label){
+  const raw = String(label || '').trim();
+  if(!raw) return null;
+  const noMs = raw.replace(/^microsoft\s+/i, '');
+  const tries = [raw, noMs,
+    raw.replace(/\s*[-]\s*legacy$/i, ''),
+    noMs.replace(/\s*[-]\s*legacy$/i, ''),
+    raw.replace(/\s+trial$/i, ''),
+    noMs.replace(/\s+trial$/i, ''),
+  ];
+  for(const t of tries){
+    const n = normHead(t);
+    if(SKU_ALIASES[n]) return SKU_ALIASES[n];
+    if(PART_BY_LABEL[n]) return PART_BY_LABEL[n];
+  }
+  return null;
+}
+
+/* Values that mean "no licence" rather than a product nobody recognises. */
+const NOT_A_LICENCE = /^(unlicensed|none|n\/?a|-|no licenses?|no licences?)$/i;
+
+/* One cell can hold several licences, joined with "+", ";" or a newline.
+   Splitting on "+" alone is wrong: some product names contain it. A real
+   tenant returned "Enterprise Mobility + Security E5", which a naive split
+   tore into "Enterprise Mobility" and "Security E5", neither of which
+   resolves, so a paid licence vanished from the totals as "unrecognised".
+
+   So: split only on the unambiguous separators, then walk the "+"-separated
+   parts greedily, take the longest run of parts that resolves to a product,
+   consume it, and continue. "Microsoft 365 E3 + Enterprise Mobility + Security
+   E5" yields both, and a name containing "+" survives whether it is alone in
+   the cell or not. */
+function splitLicences(cell){
+  const v = String(cell || '').trim();
+  if(!v || NOT_A_LICENCE.test(v)) return [];
+  const out = [];
+  for(const chunk of v.split(/[;\n]/).map(x => x.trim()).filter(Boolean)){
+    if(NOT_A_LICENCE.test(chunk)) continue;
+    if(resolveSku(chunk)){ out.push(chunk); continue; }
+    const parts = chunk.split('+').map(x => x.trim()).filter(Boolean);
+    let i = 0;
+    while(i < parts.length){
+      let taken = 0;
+      // Longest run first, so a "+" inside a name beats a "+" between names.
+      for(let n = parts.length - i; n >= 1; n--){
+        const joined = parts.slice(i, i + n).join(' + ');
+        if(resolveSku(joined)){ out.push(joined); taken = n; break; }
+      }
+      if(!taken){ out.push(parts[i]); taken = 1; }   // unknown; reported as such
+      i += taken;
+    }
+  }
+  return out;
+}
+
+const truthy = v => /^(yes|true|1|blocked|disabled)$/i.test(String(v || '').trim());
+function parseWhen(v){
+  const s = String(v || '').trim();
+  if(!s || /^(never|n\/?a|-|none)$/i.test(s)) return null;
+  const d = new Date(s);
+  return isNaN(d.getTime()) ? null : d;
+}
+
+const USER_COLS = {
+  upn:   ['user principal name', 'userprincipalname', 'upn', 'username', 'user name'],
+  name:  ['display name', 'displayname', 'name'],
+  block: ['sign-in blocked', 'sign in blocked', 'signinblocked', 'block credential',
+          'blockcredential', 'sign-in status', 'signinstatus', 'account enabled',
+          'accountenabled', 'blocked'],
+  lic:   ['licenses', 'licences', 'licenses assigned', 'assigned licenses',
+          'assignedlicenses', 'license', 'licence', 'products',
+          // Microsoft 365 active users report
+          'assigned products'],
+  last:  ['last sign-in', 'last sign in', 'lastsignindatetime', 'last sign-in date',
+          'last signin', 'last interactive sign-in',
+          'lastnoninteractivesignindatetime'],
+  /* The active-users report has no combined activity column, one per service
+     instead. Collect them all; the latest wins, because a person active in
+     Teams and nowhere else is not dormant. */
+  act:   { all: /last\s*activity\s*date/i },
+  made:  ['created', 'creation date', 'createddatetime', 'when created', 'created on'],
+  /* Licence assign date is the better grace-window anchor for licence waste
+     than account creation: what matters is how long they have held the thing
+     being paid for, not how long the account has existed. */
+  given: { all: /license\s*assign\s*date/i },
+  dead:  ['is deleted', 'isdeleted', 'deleted'],
+  dept:  ['department'],
+};
+
+function readUsersCsv(text){
+  const { rows, headers, ignored, present } = readProjected(text, USER_COLS);
+  const missing = [];
+  if(!present.upn) missing.push('User principal name');
+  if(!present.lic) missing.push('Licenses');
+  if(missing.length) throw new Error('The users export is missing: ' + missing.join(', ') +
+    '. Columns found: ' + (headers.join(', ') || 'none') + '.');
+
+  /* Which header supplied `block`, so the polarity can be read off its name. */
+  const blockHeader = present.block ? findCol(headers, USER_COLS.block) : null;
+  const saysEnabled = blockHeader && /enabled/i.test(blockHeader) && !/blocked/i.test(blockHeader);
+
+  const unknown = new Set(); let withLic = 0;
+  const users = rows.map(r => {
+    const parts = splitLicences(r.lic).map(l => {
+      const p = resolveSku(l);
+      if(!p) unknown.add(l);
+      return p;
+    }).filter(Boolean);
+    if(parts.length) withLic++;
+    /* accountEnabled is inverted from the exported column: the portal reports
+       whether sign-in is BLOCKED. A column named for "enabled" reads the other
+       way round. With no such column at all, assume enabled, that under-counts
+       disabled accounts rather than inventing them. */
+    const enabled = !present.block ? true
+      : saysEnabled ? !/^(no|false|0)$/i.test(r.block)
+      : !truthy(r.block);
+    /* Latest wins across every activity column plus any single sign-in column:
+       active anywhere is active. Taking the earliest, or the first non-empty,
+       would report someone who lives in Teams as dormant because their mailbox
+       is quiet. */
+    const dates = [parseWhen(r.last), ...(r.act || []).map(parseWhen)].filter(Boolean);
+    const when = dates.length ? new Date(Math.max(...dates.map(d => d.getTime()))) : null;
+    /* Earliest licence assignment: the grace window should start when they were
+       first given something billable. */
+    const given = (r.given || []).map(parseWhen).filter(Boolean);
+    const anchor = present.made ? parseWhen(r.made)
+      : given.length ? new Date(Math.min(...given.map(d => d.getTime())))
+      : null;
+    return {
+      userPrincipalName: r.upn,
+      displayName: r.name || r.upn,
+      // A deleted account holding a licence is certain waste, so it is carried
+      // as its own state rather than folded into "disabled".
+      accountEnabled: enabled,
+      isDeleted: present.dead ? truthy(r.dead) : false,
+      department: r.dept || '',
+      createdDateTime: anchor ? anchor.toISOString() : null,
+      // Only present when the export carried a date. Absent means "no data",
+      // which the analyzer treats as never-signed-in, not as active.
+      signInActivity: when ? { lastSignInDateTime: when.toISOString() } : {},
+      assignedLicenses: [...new Set(parts)].map(p => ({ skuId: p })),
+    };
+  }).filter(u => u.userPrincipalName);
+
+  return { users, hasSignIn: present.last || present.act,
+           hasCreated: present.made || present.given,
+           hasBlocked: present.block, hasDeleted: present.dead,
+           hasDept: present.dept, unknown: [...unknown], withLic,
+           headers, ignored };
+}
+
+const LIC_COLS = {
+  name: ['license', 'licence', 'product name', 'product', 'subscription name',
+         'licenses', 'display name', 'subscription'],
+  buy:  ['purchased', 'total', 'total licenses', 'quantity', 'paid licenses',
+         'purchased quantity', 'prepaid'],
+  used: ['assigned', 'assigned licenses', 'consumed', 'in use', 'used', 'assigned quantity'],
+  free: ['available', 'unassigned', 'unused', 'remaining'],
+};
+
+function readLicencesCsv(text){
+  const { rows, headers, ignored, present } = readProjected(text, LIC_COLS);
+  if(!present.name) throw new Error('The licences export has no product-name column. ' +
+    'Columns found: ' + (headers.join(', ') || 'none') + '.');
+  if(!present.buy && !(present.used && present.free)) throw new Error(
+    'The licences export needs a purchased count, or both assigned and available ' +
+    'so it can be derived. Columns found: ' + headers.join(', ') + '.');
+
+  const num = v => { const n = Number(String(v ?? '').replace(/[^0-9.-]/g, '')); return isFinite(n) ? n : 0; };
+  const unknown = new Set(); const out = [];
+  for(const r of rows){
+    const part = resolveSku(r.name);
+    if(!part){ if(r.name) unknown.add(r.name); continue; }
+    const used = present.used ? num(r.used) : 0;
+    const buy = present.buy ? num(r.buy) : used + num(r.free);
+    out.push({ skuId: part, skuPartNumber: part,
+               prepaidUnits: { enabled: buy }, consumedUnits: used,
+               // No export carries service plans, so redundant-SKU detection
+               // cannot run. The analyzer skips empty plan sets rather than
+               // guessing, so this degrades correctly.
+               servicePlans: [] });
+  }
+  return { subscribed: out, unknown: [...unknown], headers, ignored };
+}
+
+/* When no licences export is supplied, reconstruct what is assigned from the
+   users file. Purchased is then unknowable, so it is set equal to assigned:
+   spare seats compute to zero and no unassigned-seat findings are invented. */
+function subscribedFromUsers(users){
+  const count = {};
+  for(const u of users) for(const a of u.assignedLicenses) count[a.skuId] = (count[a.skuId] || 0) + 1;
+  return Object.entries(count).map(([part, n]) => ({
+    skuId: part, skuPartNumber: part,
+    prepaidUnits: { enabled: n }, consumedUnits: n, servicePlans: [],
+  }));
+}
+
+function runImport(usersText, licText, tenantLabel){
+  const u = readUsersCsv(usersText);
+  let subs = null, licUnknown = [], licIgnored = [];
+  if(licText && licText.trim()){
+    const l = readLicencesCsv(licText);
+    subs = l.subscribed; licUnknown = l.unknown; licIgnored = l.ignored;
+  }
+  const derived = !subs;
+  if(derived) subs = subscribedFromUsers(u.users);
+  if(!subs.length) throw new Error(
+    'No recognisable licences were found. Check that the Licenses column holds ' +
+    'product names such as "Microsoft 365 E3".');
+
+  const r = analyze(subs, u.users, u.hasSignIn, DORMANT_DAYS_DEFAULT);
+  r.tenant_name = tenantLabel || 'Imported export';
+  r.imported = true;
+
+  /* Say what this data cannot show. Every one of these is a finding type the
+     live path produces and this one cannot, which is exactly the sort of
+     silent gap that makes a total look like the whole answer. */
+  /* What was and was not read goes to the console, not the report. It is a
+     diagnostic for whoever is running the import, useful when a column fails
+     to resolve, and it tells the reader of a licence report nothing they
+     wanted to know. The allowlist is in readProjected either way. */
+  const kept = u.headers.length - u.ignored.length;
+  console.info(
+    `WantNot import: read ${kept} of ${u.headers.length} columns from the users ` +
+    `export; ${u.ignored.length} not loaded. Object ids are not read at all.`,
+    { read: u.headers.filter(h => !u.ignored.includes(h)), ignored: u.ignored,
+      licencesIgnored: licIgnored });
+
+  const notes = [];
+
+  /* A licence a user holds but the licences export never mentions cannot be
+     priced, so the analyzer drops it, correctly, but silently. That is the
+     shape of a total that looks complete and is not, so it is named. */
+  if(!derived){
+    const known = new Set(subs.map(s => s.skuId));
+    const orphans = new Set();
+    for(const usr of u.users) for(const a of usr.assignedLicenses)
+      if(!known.has(a.skuId)) orphans.add(SKU_CATALOG[a.skuId] ? SKU_CATALOG[a.skuId][0] : a.skuId);
+    if(orphans.size) notes.push(
+      'Held by users but absent from the licences export, so they could not be ' +
+      'priced and are excluded: ' + [...orphans].slice(0, 12).join(', ') +
+      (orphans.size > 12 ? ', …' : '') + '. Re-export the licences page to include them.');
+  }
+
+  if(derived) notes.push(
+    'No licences export was supplied, so purchased quantities are unknown and ' +
+    'unassigned seats could not be counted. Assigned counts were derived from ' +
+    'the users file. Add the licences export for the largest single category.');
+  /* The active-users report has no sign-in-blocked column, so an import from it
+     alone cannot find disabled accounts. That is a whole finding type going
+     missing, which is exactly what must never happen quietly. */
+  if(!u.hasBlocked) notes.push(
+    'This export carries no sign-in-blocked column, so disabled accounts still ' +
+    'holding licences could not be detected. The Active users export from the ' +
+    'Microsoft 365 admin centre has that column; the usage report does not.');
+  if(!u.hasSignIn) notes.push(
+    'The users export carried no last-sign-in column, so dormant and ' +
+    'never-signed-in accounts could not be detected. The real figure is almost ' +
+    'certainly higher. Entra admin centre › Users › Export includes it.');
+  if(u.hasSignIn && !u.hasCreated) notes.push(
+    'No creation-date column, so accounts that have never signed in were not ' +
+    'separated from newly created ones and were left out rather than guessed at.');
+  notes.push(
+    'Service plans are not present in any admin centre export, so redundant ' +
+    'licences, a cheaper SKU wholly contained in one the user already holds, ' +
+    'cannot be detected from a file. The live audit finds these.');
+  if(u.unknown.length) notes.push(
+    'Unrecognised licence names, excluded from the totals: ' +
+    u.unknown.slice(0, 12).join(', ') + (u.unknown.length > 12 ? ', …' : '') + '.');
+  if(licUnknown.length) notes.push(
+    'Unrecognised products in the licences export, excluded: ' +
+    licUnknown.slice(0, 12).join(', ') + (licUnknown.length > 12 ? ', …' : '') + '.');
+
+  r.warnings = [...notes, ...(r.warnings || [])];
+  return r;
+}
+
+const readFile = f => new Promise((res, rej) => {
+  const fr = new FileReader();
+  fr.onload = () => res(String(fr.result || ''));
+  fr.onerror = () => rej(new Error('Could not read ' + f.name + '.'));
+  fr.readAsText(f);
+});
+
+async function startImport(){
+  const usersFile = document.getElementById('impUsers').files[0];
+  const licFile = document.getElementById('impLic').files[0];
+  const err = document.getElementById('impErr');
+  err.textContent = '';
+  if(!usersFile){ err.textContent = 'Choose the users export first.'; return; }
+  const btn = document.getElementById('impGo');
+  btn.disabled = true; btn.textContent = 'Reading…';
+  try{
+    const [ut, lt] = await Promise.all([readFile(usersFile), licFile ? readFile(licFile) : Promise.resolve('')]);
+    const label = (usersFile.name || '').replace(/\.[a-z]+$/i, '') || 'Imported export';
+    const r = runImport(ut, lt, label);
+    lastResult = r;
+    renderReport(r);
+  }catch(e){
+    err.textContent = e.message || 'That file could not be read as a CSV export.';
+    btn.disabled = false; btn.textContent = 'Analyse these files';
+  }
+}
+
+function renderSignIn(problem){
+  document.getElementById('who').innerHTML = '';
+  view().innerHTML = `
+    <div class="panel rise">
+      <h1 class="big">See what your Microsoft 365 licenses are wasting</h1>
+      <p class="lede">Sign in as an administrator and get a costed breakdown of unused
+        licenses in about a minute. This page does the whole audit in your browser.</p>
+
+      <ul class="promise">
+        <li><span class="tick">&#10003;</span><span><b>Nothing is stored.</b> There is no server on our side, your
+          directory data goes from Microsoft to this browser tab and no further.</span></li>
+        <li><span class="tick">&#10003;</span><span><b>Read-only.</b> Every permission below is read. Nothing can be
+          changed in your tenant.</span></li>
+        <li><span class="tick">&#10003;</span><span><b>No standing access.</b> Access ends when you close the tab.
+          Nothing runs in the background afterwards.</span></li>
+      </ul>
+
+      <div class="scopes">
+        <table>
+          <tr><td>Organization.Read.All</td><td>Which licenses you have purchased</td></tr>
+          <tr><td>User.Read.All</td><td>Who holds them, and whether the account is active</td></tr>
+          <tr><td>AuditLog.Read.All</td><td>Last sign-in dates, to spot dormant accounts</td></tr>
+        </table>
+      </div>
+
+      ${problem ? `<div class="notice err"><span class="m">!</span><div>${esc(problem)}</div></div>` : ''}
+      ${AUTHORITY.pinned ? `<div class="notice"><span class="m">i</span><div>
+        Signing in against a specific directory: <b>${esc(AUTHORITY.pinned)}</b>.
+        Remove <code>?tenant=</code> from the URL to accept any work or school tenant.
+      </div></div>` : ''}
+
+      <div style="margin-top:26px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <button class="btn" id="signin">Sign in with Microsoft</button>
+        <span class="sub">Requires a Global Administrator or Global Reader.</span>
+      </div>
+
+      <div class="imp">
+        <h2 class="imp-h">Or import an export you already have</h2>
+        <p class="sub" style="margin:0 0 14px">
+          No consent, no sign-in, no app to approve. Take the exports out of the
+          admin centre and drop them here, they are read in this tab and go
+          nowhere else, the same as above.
+        </p>
+        <ol class="imp-steps">
+          <li><b>Microsoft 365 active users</b>, admin centre › Reports › Usage ›
+            <b>Microsoft 365 active users</b> › Export. Set the period to
+            <b>180 days</b>, or a 90-day dormancy threshold means nothing.
+            This one file carries licences and per-service activity together.
+            <br><span class="warn">Before exporting, turn <b>off</b> Settings ›
+            Org settings › Reports › “Display concealed user, group and site
+            names”. Left on, every name comes out as a hash and nothing can be
+            attributed to a person.</span></li>
+          <li><b>Licences</b>, admin centre › Billing › Licences › <b>Export</b>.
+            Optional, and the only source of purchased counts. Without it,
+            unassigned seats cannot be counted at all.</li>
+        </ol>
+        <p class="sub" style="margin:-6px 0 16px">
+          The older Users › <b>Export users</b> file still works and is the only
+          one carrying sign-in-blocked, so it is the only way to find disabled
+          accounts. Whatever is missing from the file you use is named in the
+          report rather than quietly dropped.
+        </p>
+        <div class="imp-files">
+          <label>Users or active-users export <span class="req">required</span>
+            <input type="file" id="impUsers" accept=".csv,text/csv"></label>
+          <label>Licences export <span class="opt">optional</span>
+            <input type="file" id="impLic" accept=".csv,text/csv"></label>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <button class="btn ghost" id="impGo">Analyse these files</button>
+          <span class="sub" id="impErr" style="color:var(--hot)"></span>
+        </div>
+      </div>
+    </div>`;
+  document.getElementById('impGo').onclick = startImport;
+  document.getElementById('signin').onclick = async (e)=>{
+    e.target.disabled = true; e.target.textContent = 'Waiting for Microsoft…';
+    try{ await signIn(); if(account) start(); }
+    catch(err){
+      const msg = /user_cancelled|access_denied/i.test(err.errorCode||err.message||'')
+        ? 'Sign-in was cancelled.'
+        : /consent|AADSTS65001/i.test(err.message||'')
+          ? 'An administrator needs to approve these permissions before the audit can run.'
+        : /AADSTS50020|AADSTS500200|personal Microsoft account|not exist in tenant/i.test(err.message||'')
+          ? 'That is a personal Microsoft account. This audit reads Microsoft 365 '+
+            'licensing, so it needs a work or school account. If you administer an '+
+            'Entra directory with a personal account, append ?tenant=<your-tenant-id> '+
+            'to this URL to sign in against that directory directly.'
+          : (err.message || 'Sign-in failed.');
+      renderSignIn(msg);
+    }
+  };
+}
+
+function renderProgress(){
+  view().innerHTML = `
+    <div class="panel rise">
+      <p class="label">Auditing</p>
+      <h1 class="big" style="font-size:clamp(22px,3.4vw,30px)">${esc(tenantName||'Reading your tenant')}</h1>
+      <div class="prog">
+        <div class="bar"><i id="pbar"></i></div>
+        <p class="step" id="pstep">Starting…</p>
+      </div>
+    </div>`;
+}
+
+function setStep(text, pct){
+  const b = document.getElementById('pbar'), s = document.getElementById('pstep');
+  if(b) b.style.width = Math.max(2, Math.min(100, pct))+'%';
+  if(s) s.textContent = text;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════
+   Carve bar highlighting, shared by the portfolio and tenant views.
+
+   Driven from either the band or its legend chip. The legend is not a
+   convenience: the smallest band is routinely under 1% of the bar, a few
+   pixels, which is not a hover target anyone can hit.
+
+   Hover and pin are tracked separately. Inferring hover from the last call
+   breaks on touch, where no mouseleave ever arrives, leaving a tapped band
+   highlighted with nothing able to clear it.
+   ══════════════════════════════════════════════════════════════════════ */
+function wireCarve(scope) {
+  const bar = scope.querySelector('.spendbar');
+  const axis = scope.querySelector('.axis');
+  if (!bar || !axis) return;
+  const segs = [...bar.querySelectorAll('.seg')];
+  const chips = [...scope.querySelectorAll('.legend-item')];
+  if (!segs.length) return;
+
+  const axisDefault = axis.innerHTML;
+  const total = segs.reduce((s, el) => s + Number(el.dataset.value || 0), 0);
+  let pinned = null, hovered = null;
+
+  const paint = () => {
+    const on = hovered !== null ? hovered : pinned;
+    bar.classList.toggle('focused', on !== null);
+    segs.forEach(el => el.classList.toggle('on', el.dataset.kind === on));
+    chips.forEach(el => {
+      el.classList.toggle('on', el.dataset.kind === on);
+      el.setAttribute('aria-pressed', String(el.dataset.kind === pinned));
+    });
+    if (on === null) { axis.innerHTML = axisDefault; return; }
+    const el = segs.find(s => s.dataset.kind === on);
+    const v = Number(el.dataset.value || 0);
+    axis.innerHTML =
+      `<span class="detail"><span class="sw" style="background:${kVar(on)}"></span>` +
+      `<b style="color:var(--ink)">${esc(kLabel(on))}</b>` +
+      `<b style="color:${kVar(on)}">${usd0(v)}</b>` +
+      `<span style="color:var(--ink-3)">a year</span>` +
+      `<span class="pct">${total ? (v / total * 100).toFixed(0) : 0}% of recoverable` +
+      `${pinned === on ? ' · click again to release' : ''}</span></span>`;
+  };
+
+  const wire = (el) => {
+    const k = el.dataset.kind;
+    el.addEventListener('mouseenter', () => { hovered = k; paint(); });
+    el.addEventListener('mouseleave', () => { if (hovered === k) hovered = null; paint(); });
+    el.addEventListener('focus', () => { hovered = k; paint(); });
+    el.addEventListener('blur', () => { if (hovered === k) hovered = null; paint(); });
+    el.addEventListener('click', e => { e.stopPropagation(); pinned = pinned === k ? null : k; paint(); });
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+      if (e.key === 'Escape') { pinned = null; hovered = null; paint(); el.blur(); }
+    });
+  };
+  segs.forEach(wire); chips.forEach(wire);
+  document.addEventListener('click', () => { if (pinned !== null) { pinned = null; paint(); } });
+}
+
+function carveBar(spend, byKind){
+  const waste = Object.values(byKind).reduce((a,b)=>a+b,0);
+  const total = Math.max(spend, waste) || 1;
+  const keepPct = Math.max(0, spend-waste)/total*100;
+  const segs = ORDER.filter(k=>byKind[k]>0).map(k=>
+    `<div class="seg" data-kind="${esc(k)}" data-value="${byKind[k]}" tabindex="0" role="button"
+      aria-label="${esc(kLabel(k))}, ${usd0(byKind[k])} per year"
+      style="width:${(byKind[k]/total*100).toFixed(3)}%;background:${kVar(k)}"></div>`).join('');
+  return `<div class="spendbar">
+      <div class="keep" style="width:${keepPct.toFixed(3)}%"><span>Working spend</span></div>${segs}
+    </div>
+    <div class="axis"><span><b>${compact(spend-waste)}</b> working</span>
+      <span><b style="color:var(--hot)">${compact(waste)}</b> recoverable</span></div>`;
+}
+
+function renderReport(r){
+  lastResult = r;
+  const byKind = {};
+  r.findings.forEach(f => byKind[f.kind] = (byKind[f.kind]||0)+f.annual_cost);
+  const pct = r.annual_spend_usd ? (r.annual_waste_usd/r.annual_spend_usd*100) : 0;
+
+  /* Bottom-line totals, summed from raw values rather than the rounded strings
+     in the cells. The table shows the 300 largest, so the listed subset and the
+     full total are reported separately, totalling only what fits on screen
+     would contradict the hero figure instead of confirming it. */
+  const listed = r.findings.slice(0,300);
+  const fTot = {
+    all: r.findings.reduce((s,f)=>s+(f.annual_cost||0),0),
+    listed: listed.reduce((s,f)=>s+(f.annual_cost||0),0),
+    seats: r.findings.reduce((s,f)=>s+(f.seats||0),0),
+    listedSeats: listed.reduce((s,f)=>s+(f.seats||0),0),
+  };
+  const sTot = r.sku_summary.reduce((t,s)=>({
+    purchased: t.purchased+(s.purchased||0), assigned: t.assigned+(s.assigned||0),
+    spare: t.spare+(s.spare||0), monthlySpend: t.monthlySpend+(s.monthlySpend||0),
+  }), {purchased:0, assigned:0, spare:0, monthlySpend:0});
+
+  /* An imported audit has no account behind it, so offering "Sign out" would
+     name an action that never happened and clear a session that does not
+     exist. It gets its own chrome. */
+  document.getElementById('who').innerHTML = r.imported
+    ? `<span class="pill"><span class="dot"></span>Imported file</span>
+       <button class="btn ghost sm" id="out" style="margin-left:10px">Start over</button>`
+    : `<span class="pill"><span class="dot"></span>${esc((account&&account.username)||'')}</span>
+       <button class="btn ghost sm" id="out" style="margin-left:10px">Sign out</button>`;
+  document.getElementById('out').onclick = async ()=>{
+    lastResult = null;
+    if(!r.imported){
+      try{ await msalApp.logoutPopup({account}); }catch{}
+      account = null;
+    }
+    renderSignIn();
+  };
+
+  view().innerHTML = `
+    <div class="panel rise">
+      <p class="label">${esc(r.tenant_name)} · annual recoverable</p>
+      <p class="hero-figure"><span class="cur">$</span>${Math.round(r.annual_waste_usd).toLocaleString('en-US')}</p>
+      <p class="hero-sub"><b>${pct.toFixed(1)}%</b> of a ${compact(r.annual_spend_usd)} annual
+        license bill, across <b>${r.findings.length} line item${r.findings.length===1?'':'s'}</b>, ${usd2(r.monthly_waste_usd)} every month.</p>
+      ${carveBar(r.annual_spend_usd, byKind)}
+      <div class="legend">${ORDER.filter(k=>byKind[k]>0).map(k=>
+        `<span class="legend-item" data-kind="${esc(k)}" tabindex="0" role="button" aria-pressed="false"><span class="sw" style="background:${kVar(k)}"></span>
+          ${esc(kLabel(k))} <span class="v">${usd0(byKind[k])}</span></span>`).join('')}</div>
+      <div class="stats">
+        <div class="stat"><div class="k">Users</div><div class="v">${int(r.total_users)}</div></div>
+        <div class="stat"><div class="k">Licensed</div><div class="v">${int(r.licensed_users)}</div></div>
+        <div class="stat"><div class="k">Dormant after</div><div class="v">${r.dormant_threshold_days}d</div></div>
+      </div>
+      <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn" id="csv">Download CSV</button>
+        <button class="btn ghost" id="again">${r.imported ? 'Import other files' : 'Run again'}</button>
+      </div>
+    </div>
+    ${(r.warnings||[]).map(w=>`<div class="notice"><span class="m">!</span><div>${esc(w)}</div></div>`).join('')}
+
+    <div class="sec-head"><h2 style="font-family:var(--display);font-weight:700;font-size:17px;margin:0">Findings</h2>
+      <span class="sub">${r.findings.length} line items · grouped by user, click to expand</span></div>
+    <div class="tscroll"><table class="data">
+      <thead><tr><th>Line item</th><th>License</th><th class="r">Seats</th>
+        <th>Confidence</th><th class="r">Annual</th></tr></thead>
+      <tbody id="fBody">${(()=>{const rows=r.findings.slice(0,300);const m=new Map();rows.forEach(f=>{const raw=(f.user_principal_name||'').trim();const key= raw ? raw.toLowerCase() : '\u0001unassigned';let g=m.get(key);if(!g){g={key,upn:raw,name:f.user_display_name||raw||kLabel(f.kind),items:[],seats:0,usd:0};m.set(key,g);}if(!g.name&&f.user_display_name) g.name=f.user_display_name;g.items.push(f);g.seats+=f.seats||0;g.usd+=f.annual_cost||0;});const groups=[...m.values()].sort((a,b)=>b.usd-a.usd);groups.forEach(g=>{const c={};g.items.forEach(f=>c[f.kind]=(c[f.kind]||0)+1);g.domKind=Object.entries(c).sort((a,b)=>b[1]-a[1])[0]?.[0]||'';});return groups.map((g,gi)=>{const n=g.items.length;const head=`<tr class="grp-head" data-group="${gi}" tabindex="0" role="button" aria-expanded="false"><td><div class="nm" style="display:flex;align-items:center;gap:9px"><span class="caret" style="width:10px;flex:none;color:var(--ink-3);font-size:10px">▸</span>${esc(g.name)}</div><div class="sub" style="margin-left:19px">${esc(g.upn||'no user, seats held at tenant level')}</div></td><td class="soft"><div>${n} licence${n===1?'':'s'} flagged</div><div class="sub">click to expand</div></td><td class="r money">${int(g.seats)}</td><td>${g.domKind?`<span class="badge review">${esc(kLabel(g.domKind))}</span>`:''}</td><td class="r money hot"><b>${usd0(g.usd)}</b></td></tr>`;const items=g.items.map(f=>`<tr class="grp-item" data-group="${gi}" hidden><td><div class="nm" style="display:flex;align-items:center;gap:9px;padding-left:26px"><span style="width:7px;height:7px;border-radius:2px;flex:none;background:${kVar(f.kind)}"></span>${esc(kLabel(f.kind))}</div><div class="sub" style="margin-left:26px">${esc(f.detail)}</div></td><td><div>${esc(f.sku_display_name)}</div><div class="sub">${esc(f.sku_part_number)}</div></td><td class="r money">${int(f.seats)}</td><td><span class="badge ${esc(f.confidence)}">${esc(CONF[f.confidence]||f.confidence)}</span></td><td class="r money hot">${usd0(f.annual_cost)}</td></tr>`).join('');return head+items;}).join('');})()}</tbody>
+      <tfoot>
+        ${r.findings.length>300?`
+        <tr class="sub"><td colspan="2">Listed above, the 300 largest</td>
+          <td class="r money">${int(fTot.listedSeats)}</td><td></td>
+          <td class="r money">${usd0(fTot.listed)}</td></tr>
+        <tr class="sub"><td colspan="2">Remaining ${r.findings.length-300}, in the CSV only</td>
+          <td class="r money">${int(fTot.seats-fTot.listedSeats)}</td><td></td>
+          <td class="r money">${usd0(fTot.all-fTot.listed)}</td></tr>`:''}
+        <tr>
+          <td colspan="2" class="lbl">Total recoverable
+            <span class="recon">All ${r.findings.length} finding${r.findings.length===1?'':'s'}, the figure shown at the top of this page.</span></td>
+          <td class="r money">${int(fTot.seats)}</td><td></td>
+          <td class="r money hot big">${usd0(fTot.all)}</td></tr>
+      </tfoot>
+    </table></div>
+
+    <div class="sec-head"><h2 style="font-family:var(--display);font-weight:700;font-size:17px;margin:0">License inventory</h2></div>
+    <div class="tscroll"><table class="data">
+      <thead><tr><th>SKU</th><th class="r">Purchased</th><th class="r">Assigned</th>
+        <th class="r">Spare</th><th class="r">Unit</th><th class="r">Monthly</th></tr></thead>
+      <tbody>${r.sku_summary.map(s=>`<tr>
+        <td><div class="nm">${esc(s.displayName)}</div><div class="sub">${esc(s.skuPartNumber)}</div></td>
+        <td class="r money">${int(s.purchased)}</td><td class="r money">${int(s.assigned)}</td>
+        <td class="r money ${s.spare>0?'hot':''}">${int(s.spare)}</td>
+        <td class="r money">${s.unitPrice?usd2(s.unitPrice):'<span class="sub">, </span>'}</td>
+        <td class="r money">${usd0(s.monthlySpend)}</td></tr>`).join('')}</tbody>
+      <tfoot>
+        <tr>
+          <td class="lbl">Total committed
+            <span class="recon">${r.sku_summary.length} SKU${r.sku_summary.length===1?'':'s'} ·
+              ${usd0(sTot.monthlySpend*12)} annually.</span></td>
+          <td class="r money">${int(sTot.purchased)}</td>
+          <td class="r money">${int(sTot.assigned)}</td>
+          <td class="r money ${sTot.spare>0?'hot':''}">${int(sTot.spare)}</td>
+          <td></td>
+          <td class="r money big">${usd0(sTot.monthlySpend)}</td></tr>
+        <tr class="sub"><td colspan="6">
+          Monthly. Annually that is <b>${usd0(sTot.monthlySpend*12)}</b>, of which
+          <b class="hot">${usd0(r.annual_waste_usd)}</b> is recoverable,
+          ${sTot.monthlySpend ? (r.annual_waste_usd/(sTot.monthlySpend*12)*100).toFixed(1) : '0.0'}% of the bill.
+        </td></tr>
+      </tfoot>
+    </table></div>
+
+    <div class="notice" style="margin-top:26px"><span class="m">i</span><div>
+      This is a point-in-time snapshot and nothing has been saved. Close the tab and it is gone.
+      Tracking recovery over time needs scheduled scans, which is what the full product does.
+    </div></div>`;
+
+  wireCarve(view());
+  // grouped findings toggle — same as dashboard/dashboard.html (does not repeat user name in dropdown)
+  view().querySelectorAll('#fBody tr.grp-head').forEach(h=>{
+    const toggle=()=>{
+      const gi=h.dataset.group;
+      const open=h.getAttribute('aria-expanded')==='true';
+      const next=!open;
+      h.setAttribute('aria-expanded', String(next));
+      const caret=h.querySelector('.caret');
+      if(caret) caret.textContent= next ? '▾' : '▸';
+      view().querySelectorAll(`#fBody tr.grp-item[data-group="${gi}"]`).forEach(it=>it.hidden=!next);
+    };
+    h.addEventListener('click', toggle);
+    h.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' ') {e.preventDefault(); toggle();}});
+  });
+  document.getElementById('csv').onclick = ()=>exportCsv(r);
+  // A live re-scan needs an account. An imported report has none, so it goes
+  // back to the file pickers rather than into a sign-in it never came from.
+  document.getElementById('again').onclick = ()=> r.imported ? renderSignIn() : start();
+}
+
+function exportCsv(r){
+  const q = v => '"'+String(v??'').replace(/"/g,'""')+'"';
+  const rows = [['Category','Detail','User','UPN','Department','License','SkuPartNumber','Seats',
+                 'Confidence','MonthlyUSD','AnnualUSD'].join(',')];
+  r.findings.forEach(f => rows.push([kLabel(f.kind), f.detail, f.user_display_name||'',
+    f.user_principal_name||'', f.department||'', f.sku_display_name, f.sku_part_number, f.seats,
+    CONF[f.confidence]||f.confidence, f.monthly_cost, f.annual_cost].map(q).join(',')));
+  const name = (r.tenant_name||'tenant').replace(/[^a-z0-9]+/gi,'-').toLowerCase();
+  const url = URL.createObjectURL(new Blob(['\ufeff'+rows.join('\r\n')],{type:'text/csv;charset=utf-8'}));
+  const a = Object.assign(document.createElement('a'),
+    {href:url, download:`wantnot-audit-${name}-${r.scanned_at.slice(0,10)}.csv`});
+  a.style.display='none'; document.body.appendChild(a); a.click();
+  setTimeout(()=>{ a.remove(); try{URL.revokeObjectURL(url);}catch{} }, 1500);
+}
+
+async function start(){
+  renderProgress();
+  try{
+    const r = await runAudit(setStep);
+    renderReport(r);
+  }catch(e){
+    const msg = e.status === 403
+      ? 'Microsoft refused the request. The signed-in account needs a role that can read '+
+        'directory and audit data, Global Reader or Global Administrator.'
+      : e.status === 401 ? 'The sign-in expired. Please sign in again.'
+      : (e.message || 'The audit could not be completed.');
+    renderSignIn(msg);
+  }
+}
+
+(async function boot(){
+  try{
+    await initMsal();
+    if(account) start(); else renderSignIn();
+  }catch(e){
+    if(e.message === 'NO_CONFIG' || window.__noConfig) return renderSetup();
+    renderSignIn(e.message);
+  }
+})();
+</script>
+</body>
+</html>

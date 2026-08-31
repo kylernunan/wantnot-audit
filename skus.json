@@ -1,0 +1,269 @@
+{
+  "version": "2026-08",
+  "priceAsOf": "2026-08",
+  "source": "shared/skus.py",
+  "skus": {
+    "SPE_E3": [
+      "Microsoft 365 E3",
+      39.0
+    ],
+    "SPE_E5": [
+      "Microsoft 365 E5",
+      60.0
+    ],
+    "MICROSOFT_365_E7": [
+      "Microsoft 365 E7",
+      99.0
+    ],
+    "Microsoft_365_E3_(no_Teams)": [
+      "Microsoft 365 E3 (no Teams)",
+      30.45
+    ],
+    "Microsoft_365_E5_(no_Teams)": [
+      "Microsoft 365 E5 (no Teams)",
+      51.45
+    ],
+    "SPE_F1": [
+      "Microsoft 365 F3",
+      10.0
+    ],
+    "M365_F1_COMM": [
+      "Microsoft 365 F1",
+      3.0
+    ],
+    "STANDARDPACK": [
+      "Office 365 E1",
+      10.0
+    ],
+    "ENTERPRISEPACK": [
+      "Office 365 E3",
+      23.0
+    ],
+    "ENTERPRISEPREMIUM": [
+      "Office 365 E5",
+      38.0
+    ],
+    "DESKLESSPACK": [
+      "Office 365 F3",
+      4.0
+    ],
+    "O365_BUSINESS_ESSENTIALS": [
+      "Microsoft 365 Business Basic",
+      7.0
+    ],
+    "O365_BUSINESS_PREMIUM": [
+      "Microsoft 365 Business Standard",
+      12.5
+    ],
+    "SPB": [
+      "Microsoft 365 Business Premium",
+      22.0
+    ],
+    "Microsoft_365_Business_Basic_(no Teams)": [
+      "Microsoft 365 Business Basic (no Teams)",
+      5.4
+    ],
+    "O365_BUSINESS": [
+      "Microsoft 365 Apps for business",
+      10.0
+    ],
+    "OFFICESUBSCRIPTION": [
+      "Microsoft 365 Apps for enterprise",
+      12.0
+    ],
+    "EXCHANGESTANDARD": [
+      "Exchange Online Plan 1",
+      4.0
+    ],
+    "EXCHANGEENTERPRISE": [
+      "Exchange Online Plan 2",
+      8.0
+    ],
+    "EXCHANGEDESKLESS": [
+      "Exchange Online Kiosk",
+      2.0
+    ],
+    "AAD_PREMIUM": [
+      "Entra ID P1",
+      6.0
+    ],
+    "AAD_PREMIUM_P2": [
+      "Entra ID P2",
+      9.0
+    ],
+    "EMS": [
+      "Enterprise Mobility + Security E3",
+      10.6
+    ],
+    "EMSPREMIUM": [
+      "Enterprise Mobility + Security E5",
+      16.4
+    ],
+    "IDENTITY_THREAT_PROTECTION": [
+      "Microsoft 365 E5 Security",
+      12.0
+    ],
+    "INTUNE_A": [
+      "Intune Plan 1",
+      8.0
+    ],
+    "ATP_ENTERPRISE": [
+      "Defender for Office 365 P1",
+      2.0
+    ],
+    "THREAT_INTELLIGENCE": [
+      "Defender for Office 365 P2",
+      5.0
+    ],
+    "Microsoft_365_Copilot": [
+      "Microsoft 365 Copilot",
+      30.0
+    ],
+    "M365_Copilot": [
+      "Microsoft 365 Copilot",
+      30.0
+    ],
+    "POWER_BI_PRO": [
+      "Power BI Pro",
+      14.0
+    ],
+    "PBI_PREMIUM_PER_USER": [
+      "Power BI Premium Per User",
+      24.0
+    ],
+    "PROJECTESSENTIALS": [
+      "Project Plan 1",
+      10.0
+    ],
+    "PROJECTPROFESSIONAL": [
+      "Project Plan 3",
+      30.0
+    ],
+    "PROJECTPREMIUM": [
+      "Project Plan 5",
+      55.0
+    ],
+    "VISIOCLIENT": [
+      "Visio Plan 2",
+      15.0
+    ],
+    "VISIOONLINE_PLAN1": [
+      "Visio Plan 1",
+      5.0
+    ],
+    "MCOEV": [
+      "Teams Phone Standard",
+      8.0
+    ],
+    "MCOMEETADV": [
+      "Teams Audio Conferencing",
+      4.0
+    ],
+    "POWERAUTOMATE_ATTENDED_RPA": [
+      "Power Automate Premium",
+      15.0
+    ],
+    "POWERAPPS_PER_USER": [
+      "Power Apps Premium",
+      20.0
+    ],
+    "WIN_DEF_ATP": [
+      "Defender for Endpoint P2",
+      5.2
+    ],
+    "RIGHTSMANAGEMENT": [
+      "Azure Information Protection P1",
+      2.0
+    ],
+    "FLOW_FREE": [
+      "Power Automate Free",
+      0.0
+    ],
+    "POWER_BI_STANDARD": [
+      "Power BI (free)",
+      0.0
+    ],
+    "POWERAPPS_VIRAL": [
+      "Power Apps Plan 2 Trial",
+      0.0
+    ],
+    "TEAMS_EXPLORATORY": [
+      "Teams Exploratory",
+      0.0
+    ],
+    "WINDOWS_STORE": [
+      "Windows Store for Business",
+      0.0
+    ],
+    "MCOPSTNC": [
+      "Communications Credits",
+      0.0
+    ],
+    "STREAM": [
+      "Microsoft Stream",
+      0.0
+    ],
+    "TEAMS_FREE": [
+      "Microsoft Teams (free)",
+      0.0
+    ],
+    "MS_TEAMS_IW": [
+      "Microsoft Teams Trial",
+      0.0
+    ],
+    "CCIBOTS_PRIVPREV_VIRAL": [
+      "Microsoft Copilot Studio Viral Trial",
+      0.0
+    ]
+  },
+  "kinds": {
+    "unassigned_seats": [
+      "Unassigned seats",
+      "--k1"
+    ],
+    "disabled_user": [
+      "Disabled accounts",
+      "--k2"
+    ],
+    "deleted_user": [
+      "Deleted accounts",
+      "--k3"
+    ],
+    "dormant_user": [
+      "Dormant users",
+      "--k4"
+    ],
+    "never_signed_in": [
+      "Never signed in",
+      "--k5"
+    ],
+    "redundant_sku": [
+      "Redundant licenses",
+      "--k6"
+    ],
+    "downgrade_candidate": [
+      "Downgradable",
+      "--k7"
+    ]
+  },
+  "palette": {
+    "light": {
+      "--k1": "#FF4D2E",
+      "--k2": "#FF7038",
+      "--k3": "#FB9440",
+      "--k4": "#DCAA4A",
+      "--k5": "#B3A277",
+      "--k6": "#8F9E86",
+      "--k7": "#6F8C9B"
+    },
+    "dark": {
+      "--k1": "#FF6647",
+      "--k2": "#FF8654",
+      "--k3": "#FCA659",
+      "--k4": "#E4BB65",
+      "--k5": "#C0B08A",
+      "--k6": "#9DAF95",
+      "--k7": "#7F9DAD"
+    }
+  }
+}

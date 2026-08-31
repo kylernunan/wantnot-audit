@@ -1,0 +1,3 @@
+/* Generated from skus.json — do not hand-edit. Run tools/sync_catalog.py */
+:root{ --k1:#FF4D2E; --k2:#FF7038; --k3:#FB9440; --k4:#DCAA4A; --k5:#B3A277; --k6:#8F9E86; --k7:#6F8C9B; }
+@media (prefers-color-scheme:dark){:root{ --k1:#FF6647; --k2:#FF8654; --k3:#FCA659; --k4:#E4BB65; --k5:#C0B08A; --k6:#9DAF95; --k7:#7F9DAD; }}

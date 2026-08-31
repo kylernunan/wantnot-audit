@@ -2,7 +2,7 @@
 
 Free, **browser-only** Microsoft 365 licence waste audit. Sign in as a Global Reader or Global Admin, get a costed breakdown in about a minute — or import CSV exports from the Microsoft 365 admin centre with no consent at all. **Nothing is stored, anywhere**; directory data goes from Microsoft Graph to this tab and no further.
 
-Live on **`https://audit.wantnot.nunan.com`** (production origin). The full WantNot product (continuous, multi-tenant, nightly scans, portfolio view) lives at `https://wantnot.nunan.com` — this repo is the free audit only.
+Live on **`https://audit.wantnot.nunan.com`** (production origin, SWA `swa-wantnot-audit` `brave-ground-0ca79031e.7.azurestaticapps.net`, `CNAME audit → azurestaticapps.net` via the parent panel; `https://wantnot.nunan.com/audit` is a permanent 301 here). The full WantNot product (continuous, multi-tenant, nightly scans, portfolio view) lives at `https://wantnot.nunan.com` — this repo is the free audit only (private repo `kylernunan/wantnot`).
 
 **Trust model:** delegated OIDC with PKCE, public client, no secret, three **read-only** delegated scopes. See [Scopes](#scopes) and [Privacy](#privacy).
 
@@ -100,7 +100,7 @@ Bumping prices is a PR that edits `skus.json`; derived files must be regenerated
 
 ## Parity — browser and backend agree
 
-`fixtures/parity_fixtures.json` is the published contract. `tools/parity_runner.mjs` runs the browser analyzer (`audit_logic.js`) through it; the private repo's `tools/parity_check.py` runs the Python analyzer through the same fixtures. A divergence would mean the free audit quotes a figure the backend would contradict — that is the credibility failure this product exists to prevent.
+`fixtures/parity_fixtures.json` is the published contract (mirror of `tools/parity_fixtures.json` in `kylernunan/wantnot`). `tools/parity_runner.mjs` runs the browser analyzer (`audit_logic.js`) through it; the private repo's `tools/parity_check.py` runs the Python analyzer (`shared/analyzer.py`) through the same fixtures (cross-repo parity, `tools/check_all.sh` + `backend.yml`, price drift pinned via `SKU_CATALOG`). A divergence would mean the free audit quotes a figure the backend would contradict — that is the credibility failure this product exists to prevent.
 
 ```bash
 node tools/parity_runner.mjs fixtures/parity_fixtures.json /tmp/out.json
@@ -141,7 +141,7 @@ fixtures/
 - `downgrade_candidate` is backend-only (deferred).
 - Service plans are absent from every admin-centre CSV, so `redundant_sku` cannot be detected from imports.
 - Storage is `westus2` only in the full product — not relevant here (no storage).
-- No SOC 2, no pen test — same posture as the full product; compliance docs live in the private repo.
+- No SOC 2, no pen test — same posture as the full product; compliance docs live in the private repo (`kylernunan/wantnot:COMPLIANCE.md`, `STATUS.md`, `legal/`). `wantnot.nunan.com/audit → 301` to this origin.
 
 ---
 

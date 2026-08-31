@@ -281,8 +281,10 @@ const SCOPES = [
 ];
 
 /* ═════════════════════ ANALYZER START ═════════════════════
-/* Now imported via audit_logic.js — see dashboard/audit_logic.js (single source with shared/analyzer.py) */
-/* ═════════════════════ ANALYZER END ═════════════════════ */
+   Imported via audit_logic.js (loaded above) — the single source shared with
+   the private backend's shared/analyzer.py, verified against
+   fixtures/parity_expected.json by tools/parity_check.py.
+   ═══════════════════════ ANALYZER END ═════════════════════ */
 
 /* KINDS now in kinds.js (single source); inline is fallback for file:// */
 var KINDS = (typeof KINDS !== 'undefined' && KINDS) ? KINDS : (typeof KINDS_SHARED !== 'undefined' ? KINDS_SHARED : {

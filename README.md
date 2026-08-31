@@ -96,17 +96,26 @@ python tools/sync_catalog.py --check  # CI drift gate — fails if derived files
 
 Bumping prices is a PR that edits `skus.json`; derived files must be regenerated in the same PR (CI enforces).
 
+**Nightly sync:** `.github/workflows/sync-catalog.yml` pulls `skus.json` + the parity contract from `kylernunan/wantnot@main` (04:15 UTC, after the backend's weekly catalog sync) and opens a PR on drift — derived files are regenerated and both gates run inside the sync branch before review. It needs a read-only PAT on the private repo in the `WANTNOT_SYNC_PAT` secret; forks without it skip cleanly.
+
 ---
 
 ## Parity — browser and backend agree
 
-`fixtures/parity_fixtures.json` is the published contract (mirror of `tools/parity_fixtures.json` in `kylernunan/wantnot`). `tools/parity_runner.mjs` runs the browser analyzer (`audit_logic.js`) through it; the private repo's `tools/parity_check.py` runs the Python analyzer (`shared/analyzer.py`) through the same fixtures (cross-repo parity, `tools/check_all.sh` + `backend.yml`, price drift pinned via `SKU_CATALOG`). A divergence would mean the free audit quotes a figure the backend would contradict — that is the credibility failure this product exists to prevent.
+The contract crosses the repo boundary as two files:
+
+- `fixtures/parity_fixtures.json` — the inputs (mirror of `tools/parity_fixtures.json` in `kylernunan/wantnot`)
+- `fixtures/parity_expected.json` — the backend's outputs, generated from `shared/analyzer.py` by `tools/parity_snapshot.py` in the private repo
+
+`tools/parity_check.py` runs the browser analyzer (`audit_logic.js`) through the fixtures (via `tools/parity_runner.mjs`) and asserts the output matches the snapshot — finding keys, seats, money, confidence, waste totals, warning semantics. A divergence would mean the free audit quotes a figure the backend would contradict — that is the credibility failure this product exists to prevent.
 
 ```bash
-node tools/parity_runner.mjs fixtures/parity_fixtures.json /tmp/out.json
+python tools/parity_check.py     # 30/30 assertions against the snapshot
 ```
 
-Downgrade is exempt — the browser intentionally does not emit `downgrade_candidate`; parity tolerates that `backend-only` kind.
+A fixture or analyzer change must regenerate the snapshot in `wantnot` (`python3 tools/parity_snapshot.py`) and sync both files — the nightly workflow opens that PR automatically on drift.
+
+Downgrade is exempt — the browser intentionally does not emit `downgrade_candidate`; the snapshot comparison tolerates that `backend-only` kind.
 
 ---
 
@@ -120,18 +129,21 @@ kinds.js                generated from skus.json (KINDS → --k1..k7)
 palette.css             generated from skus.json (light + dark ramp)
 sort.js                 table sorting for report tables
 skus.json               snapshot of shared/skus.json (version, priceAsOf, skus, kinds, palette)
-config.js               generated at deploy from AUDIT_CLIENT_ID (not committed)
-config.js.example       placeholder for forks
+config.js               placeholder; real client ID injected at deploy from AUDIT_CLIENT_ID
+config.js.example       annotated template for forks
 brand/*                 proprietary — see BRAND_LICENSE.md
 site.webmanifest        PWA manifest
 staticwebapp.config.json SWA routing + CSP (no azurewebsites.net connect-src)
 tools/
+  parity_check.py       browser output vs fixtures/parity_expected.json (self-contained)
   parity_runner.mjs     browser analyzer runner for fixtures
   sync_catalog.py       skus.json → catalog.js/kinds.js/palette.css + --check
 fixtures/
-  parity_fixtures.json  published contract (do not edit except via PR)
+  parity_fixtures.json  published contract inputs (mirror of wantnot tools/parity_fixtures.json)
+  parity_expected.json  backend outputs per fixture (from wantnot tools/parity_snapshot.py)
 .github/workflows/
-  deploy.yml            parity + sync check + deploy
+  deploy.yml            drift gate + parity vs snapshot + config guard + deploy
+  sync-catalog.yml      nightly pull of skus.json + parity contract from wantnot
 ```
 
 ---

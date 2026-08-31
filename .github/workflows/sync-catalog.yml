@@ -1,0 +1,96 @@
+# Nightly sync of the cross-repo contract from the private backend repo.
+#
+# Three files are authored in kylernunan/wantnot and consumed here:
+#   shared/skus.json           -> skus.json           (prices/names/kinds/palette)
+#   tools/parity_fixtures.json -> fixtures/parity_fixtures.json
+#   tools/parity_expected.json -> fixtures/parity_expected.json
+#
+# On drift this opens (or updates) a PR rather than pushing to main, so the
+# generated files are refreshed by the same change and deploy.yml's checks gate
+# it. Forks without the PAT skip cleanly.
+name: Sync catalog & parity contract
+
+on:
+  schedule:
+    - cron: '15 4 * * *'  # 04:15 UTC — after wantnot's weekly catalog sync (Sun 04:00)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    name: Sync from wantnot
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Fetch contract files from kylernunan/wantnot
+        id: fetch
+        env:
+          WANTNOT_PAT: ${{ secrets.WANTNOT_SYNC_PAT }}
+        run: |
+          set -euo pipefail
+          if [ -z "${WANTNOT_PAT:-}" ]; then
+            echo "::notice::WANTNOT_SYNC_PAT not set — skipping sync (fork)"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # PAT needs only read:contents on the private kylernunan/wantnot repo.
+          BASE="https://raw.githubusercontent.com/kylernunan/wantnot/main"
+          mkdir -p /tmp/sync
+          for pair in "shared/skus.json:skus.json" \
+                      "tools/parity_fixtures.json:fixtures/parity_fixtures.json" \
+                      "tools/parity_expected.json:fixtures/parity_expected.json"; do
+            src="${pair%%:*}"; dst="${pair##*:}"
+            curl -fsSL -H "Authorization: token $WANTNOT_PAT" \
+              -H "Accept: application/vnd.github.raw" \
+              "$BASE/$src" -o "/tmp/sync/$(basename "$dst")" \
+              || { echo "::error::fetch failed for $src"; exit 1; }
+          done
+          CHANGED=0
+          if ! cmp -s /tmp/sync/skus.json skus.json; then CHANGED=1; fi
+          if ! cmp -s /tmp/sync/parity_fixtures.json fixtures/parity_fixtures.json; then CHANGED=1; fi
+          if ! cmp -s /tmp/sync/parity_expected.json fixtures/parity_expected.json; then CHANGED=1; fi
+          echo "changed=$CHANGED" >> "$GITHUB_OUTPUT"
+
+      - name: Nothing to do
+        if: steps.fetch.outputs.skip == 'true' || steps.fetch.outputs.changed == '0'
+        run: echo "contract already in sync"
+
+      - name: Create sync branch and PR
+        if: steps.fetch.outputs.skip != 'true' && steps.fetch.outputs.changed == '1'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          BRANCH="sync/contract-$(date -u +%Y%m%d)"
+          git config user.name "wantnot-sync-bot"
+          git config user.email "wantnot-sync-bot@users.noreply.github.com"
+          git checkout -B "$BRANCH"
+          cp /tmp/sync/skus.json skus.json
+          cp /tmp/sync/parity_fixtures.json fixtures/parity_fixtures.json
+          cp /tmp/sync/parity_expected.json fixtures/parity_expected.json
+
+          # Regenerate derived files from the new skus.json, then prove the gates pass.
+          python3 tools/sync_catalog.py
+          python3 tools/sync_catalog.py --check
+          python3 -m pip install --quiet --upgrade pip || true
+          node tools/parity_runner.mjs fixtures/parity_fixtures.json /tmp/parity_sync_out.json >/dev/null
+          python3 tools/parity_check.py
+
+          git add skus.json fixtures/parity_fixtures.json fixtures/parity_expected.json \
+                  catalog.js kinds.js palette.css
+          git commit -m "sync: skus.json + parity contract from kylernunan/wantnot ($(date -u +%Y-%m-%d))
+
+          Pulled by .github/workflows/sync-catalog.yml. Derived files regenerated
+          via tools/sync_catalog.py; parity snapshot verified locally in CI.
+
+          (automated — review price/name changes against the wantnot commit history)"
+          git push -f origin "$BRANCH"
+          gh pr create --fill \
+            --title "Sync catalog + parity contract ($(date -u +%Y-%m-%d))" \
+            --body "Automated nightly sync from \`kylernunan/wantnot@main\`. If a PR from a previous sync is still open, rebase it instead." \
+            --base main --head "$BRANCH" \
+            || gh pr view "$BRANCH" --json url -q .url && echo "PR already open"

@@ -1,3 +1,16 @@
 # Audit is static-only — no venv, no Functions artifacts
 .DS_Store
 Thumbs.db
+
+# Python caches must never be committed
+__pycache__/
+*.pyc
+*.pyo
+
+# Local overrides and secrets
+.venv/
+venv/
+local.settings.json
+config.local.js
+out.json
+*.log

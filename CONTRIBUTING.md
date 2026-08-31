@@ -20,11 +20,16 @@ This repo is **MIT for code, proprietary for brand** (`LICENSE` vs `BRAND_LICENS
 
 ## Parity contract
 
-- `fixtures/parity_fixtures.json` is the cross-repo handshake. Do not edit it except via a PR where both repos' parity runs are green.
+- `fixtures/parity_fixtures.json` + `fixtures/parity_expected.json` are the cross-repo handshake, synced nightly from `kylernunan/wantnot` by `.github/workflows/sync-catalog.yml`. Do not edit either here — change them in the private repo and let the sync PR bring them.
 - Run locally:
   ```bash
-  node tools/parity_runner.mjs fixtures/parity_fixtures.json /tmp/out.json
+  python tools/parity_check.py    # browser analyzer vs backend snapshot (30 assertions)
   ```
+- CI runs the same command in `deploy.yml` before any deploy; a browser-side analyzer change that diverges from the backend fails there.
+
+## Configuration
+
+- `config.js` in the repo is a **placeholder** (empty client ID) so forks and `file://` previews land in the setup state instead of erroring. The production value is injected at deploy time from the `AUDIT_CLIENT_ID` secret. Never commit a real client ID — CI rejects a GUID-shaped value in `config.js`.
 
 ## Importer changes
 

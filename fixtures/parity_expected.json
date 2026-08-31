@@ -1,0 +1,141 @@
+{
+  "comment": "Expected backend output per parity fixture, generated from shared/analyzer.py by tools/parity_snapshot.py. Synced to kylernunan/wantnot-audit fixtures/parity_expected.json, whose tools/parity_check.py asserts the browser analyzer matches it. Regenerate in the same PR as any fixture or analyzer change.",
+  "expected": {
+    "basic": {
+      "annual_waste_usd": 7344.0,
+      "findings": [
+        {
+          "kind": "disabled_user",
+          "sku_part_number": "SPE_E3",
+          "user_principal_name": "dan@x.com",
+          "seats": 1,
+          "annual_cost": 432.0,
+          "confidence": "certain"
+        },
+        {
+          "kind": "dormant_user",
+          "sku_part_number": "SPE_E3",
+          "user_principal_name": "dora@x.com",
+          "seats": 1,
+          "annual_cost": 432.0,
+          "confidence": "high"
+        },
+        {
+          "kind": "never_signed_in",
+          "sku_part_number": "SPE_E3",
+          "user_principal_name": "ned@x.com",
+          "seats": 1,
+          "annual_cost": 432.0,
+          "confidence": "high"
+        },
+        {
+          "kind": "unassigned_seats",
+          "sku_part_number": "SPE_E3",
+          "user_principal_name": null,
+          "seats": 14,
+          "annual_cost": 6048.0,
+          "confidence": "certain"
+        }
+      ],
+      "warnings_semantics": {
+        "signin_unavailable": false,
+        "unknown_price": []
+      }
+    },
+    "redundant": {
+      "annual_waste_usd": 48.0,
+      "findings": [
+        {
+          "kind": "redundant_sku",
+          "sku_part_number": "EXCHANGESTANDARD",
+          "user_principal_name": "rita@x.com",
+          "seats": 1,
+          "annual_cost": 48.0,
+          "confidence": "review"
+        }
+      ],
+      "warnings_semantics": {
+        "signin_unavailable": false,
+        "unknown_price": []
+      }
+    },
+    "collation": {
+      "annual_waste_usd": 5616.0,
+      "findings": [
+        {
+          "kind": "unassigned_seats",
+          "sku_part_number": "SPE_E3",
+          "user_principal_name": null,
+          "seats": 13,
+          "annual_cost": 5616.0,
+          "confidence": "certain"
+        }
+      ],
+      "warnings_semantics": {
+        "signin_unavailable": false,
+        "unknown_price": []
+      }
+    },
+    "deleted": {
+      "annual_waste_usd": 432.0,
+      "findings": [
+        {
+          "kind": "deleted_user",
+          "sku_part_number": "SPE_E3",
+          "user_principal_name": "dina@x.com",
+          "seats": 1,
+          "annual_cost": 432.0,
+          "confidence": "certain"
+        }
+      ],
+      "warnings_semantics": {
+        "signin_unavailable": false,
+        "unknown_price": []
+      }
+    },
+    "no_signin_data": {
+      "annual_waste_usd": 6480.0,
+      "findings": [
+        {
+          "kind": "disabled_user",
+          "sku_part_number": "SPE_E3",
+          "user_principal_name": "dan@x.com",
+          "seats": 1,
+          "annual_cost": 432.0,
+          "confidence": "certain"
+        },
+        {
+          "kind": "unassigned_seats",
+          "sku_part_number": "SPE_E3",
+          "user_principal_name": null,
+          "seats": 14,
+          "annual_cost": 6048.0,
+          "confidence": "certain"
+        }
+      ],
+      "warnings_semantics": {
+        "signin_unavailable": true,
+        "unknown_price": []
+      }
+    },
+    "unknown_sku": {
+      "annual_waste_usd": 1296.0,
+      "findings": [
+        {
+          "kind": "unassigned_seats",
+          "sku_part_number": "SPE_E3",
+          "user_principal_name": null,
+          "seats": 3,
+          "annual_cost": 1296.0,
+          "confidence": "certain"
+        }
+      ],
+      "warnings_semantics": {
+        "signin_unavailable": false,
+        "unknown_price": [
+          "SOMECUSTOMSKU"
+        ]
+      }
+    }
+  }
+}

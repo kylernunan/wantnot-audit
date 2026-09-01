@@ -64,9 +64,13 @@ body{margin:0;background:var(--page);color:var(--ink);font-family:var(--ui);font
 .brand{justify-self:start}
 .segs{justify-self:center}
 .auth{justify-self:end;display:inline-flex;align-items:center;gap:10px}
+.auth .btn-audit{font:inherit;font-size:13px;font-weight:600;padding:8px 14px;border-radius:999px;background:transparent;color:var(--ink-2);border:1px solid var(--line);text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:background .14s,color .14s,border-color .14s,opacity .13s;cursor:pointer}
+.auth .btn-audit:hover{color:var(--ink);border-color:var(--ink-3);background:var(--card-2)}
+.auth .btn-audit.active{background:var(--ink);color:var(--page);border-color:var(--ink)}
+.auth .btn-audit:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
 .auth .btn-signin{font:inherit;font-size:13px;font-weight:600;padding:8px 16px;border-radius:999px;background:var(--ink);color:var(--page);border:1px solid var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:opacity .13s;cursor:pointer}
 .auth .btn-signin:hover{opacity:.88}
-@media(max-width:720px){.topbar{grid-template-columns:1fr auto;grid-template-areas:"brand auth" "nav nav";gap:12px}.brand{grid-area:brand}.auth{grid-area:auth}.segs{grid-area:nav;justify-self:center;width:100%;justify-content:center}}
+@media(max-width:720px){.topbar{grid-template-columns:1fr auto;grid-template-areas:"brand auth" "nav nav";gap:12px}.brand{grid-area:brand}.auth{grid-area:auth}.segs{grid-area:nav;justify-self:center;width:100%;justify-content:center}.auth{gap:6px}.auth .btn-audit,.auth .btn-signin{padding:7px 10px;font-size:12px}}
 .mark{font-family:var(--display);font-weight:800;font-size:17px;font-stretch:118%;
       letter-spacing:-.005em;text-transform:uppercase;margin:0;display:flex;align-items:center;gap:9px}
 .mark .glyph{width:28px;height:14px;border-radius:4px;
@@ -235,9 +239,8 @@ table.data tbody tr.grp-item td{border-bottom-color:var(--line-2)}
       <a class="seg-link" href="https://wantnot.nunan.com/method">Method</a>
       <a class="seg-link" href="https://wantnot.nunan.com/pricing">Pricing</a>
       <a class="seg-link" href="https://wantnot.nunan.com/dashboard">Dashboard</a>
-      <a class="seg-link active" href="/" aria-current="page">Instant Audit</a>
     </div>
-    <div class="auth"><a class="btn-signin" href="/dashboard">Customer Sign-in</a><span id="who" style="margin-left:10px"></span></div>
+    <div class="auth"><a class="btn-audit active" href="/" aria-current="page">Instant Audit</a><a class="btn-signin" href="https://wantnot.nunan.com/dashboard">Customer Sign-in</a><span id="who" style="margin-left:6px"></span></div>
   </header>
   <main id="view" aria-live="polite"></main>
 </div>

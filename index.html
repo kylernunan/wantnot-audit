@@ -1238,7 +1238,29 @@ function renderReport(r){
     <div class="notice" style="margin-top:26px"><span class="m">i</span><div>
       This is a point-in-time snapshot and nothing has been saved. Close the tab and it is gone.
       Tracking recovery over time needs scheduled scans, which is what the full product does.
-    </div></div>`;
+    </div></div>
+
+    <div id="wanda" class="panel" style="margin-top:18px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+        <span class="pill" style="background:var(--ink);color:var(--page);border-color:var(--ink)"><span class="dot" style="background:var(--hot)"></span>Wanda</span>
+        <span style="font-weight:700;font-size:15px">More insights available through Wanda</span>
+        <span class="sub">— grounded AI over your totals, no names leave your browser without consent</span>
+      </div>
+      <p class="sub" style="margin:0 0 14px">Unlock a prioritized narrative, confidence notes, and what the continuous product would track next. Requires email so we can follow up; nothing from your directory is stored — only anonymized totals (waste/spend/by kind) and the address you provide.</p>
+      <div id="wandaForm" style="display:grid;gap:10px;max-width:480px">
+        <label style="font-size:13px;font-weight:600">Work email
+          <input id="wandaEmail" type="email" autocomplete="email" placeholder="you@company.com" style="width:100%;margin-top:6px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:inherit;background:var(--card);color:var(--ink)">
+        </label>
+        <label style="font-size:13px;display:flex;gap:8px;align-items:center;cursor:pointer"><input id="wandaMarketing" type="checkbox"> Send me product updates (occasional, unsubscribe any time)</label>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <button class="btn" id="wandaGo">Unlock AI insights</button>
+          <span class="sub" id="wandaErr" style="color:var(--hot)"></span>
+        </div>
+        <p class="sub" style="margin:0;font-size:11.5px">By unlocking, you agree to store your email, anonymized totals, and mailing preference. See <a href="https://wantnot.nunan.com/privacy" target="_blank" rel="noopener">privacy</a>. No UPNs, display names, or findings are sent — only aggregates.</p>
+      </div>
+      <div id="wandaOut" class="hidden" style="margin-top:16px;padding:16px;background:var(--card-2);border:1px solid var(--line-2);border-radius:10px;white-space:pre-wrap;font-size:13.5px;line-height:1.6"></div>
+      <div id="wandaMeta" class="hidden sub" style="margin-top:8px;font-size:11.5px"></div>
+    </div>`;
 
   wireCarve(view());
   // grouped findings toggle — same as dashboard/dashboard.html (does not repeat user name in dropdown)
@@ -1259,6 +1281,79 @@ function renderReport(r){
   // A live re-scan needs an account. An imported report has none, so it goes
   // back to the file pickers rather than into a sign-in it never came from.
   document.getElementById('again').onclick = ()=> r.imported ? renderSignIn() : start();
+
+  // ── Wanda: email-gated, anonymized, grounded insights ──────────────
+  (() => {
+    const btn = document.getElementById('wandaGo');
+    if(!btn) return;
+    const emailEl = document.getElementById('wandaEmail');
+    const marketingEl = document.getElementById('wandaMarketing');
+    const errEl = document.getElementById('wandaErr');
+    const outEl = document.getElementById('wandaOut');
+    const metaEl = document.getElementById('wandaMeta');
+    const formEl = document.getElementById('wandaForm');
+    const apiBase = (window.WANTNOT_API_BASE || '').replace(/\/+$/,'') || 'https://func-wantnot-4dc52f.azurewebsites.net';
+    const emailOk = v => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test((v||'').trim());
+    // Build anonymized summary — ONLY aggregates, no UPNs/display names/findings
+    const buildSummary = () => {
+      const byKind = {};
+      (r.findings||[]).forEach(f => { byKind[f.kind] = (byKind[f.kind]||0) + (f.annual_cost||0); });
+      // Round like backend PriceBook — 2dp
+      Object.keys(byKind).forEach(k => byKind[k] = Math.round(byKind[k]*100)/100);
+      return {
+        annual_waste_usd: r.annual_waste_usd || 0,
+        annual_spend_usd: r.annual_spend_usd || 0,
+        monthly_waste_usd: r.monthly_waste_usd || 0,
+        findings_count: (r.findings||[]).length,
+        by_kind: byKind,
+        sku_summary: (r.sku_summary||[]).map(s => ({
+          skuPartNumber: s.skuPartNumber, displayName: s.displayName,
+          purchased: s.purchased||0, assigned: s.assigned||0, spare: s.spare||0,
+          monthlySpend: s.monthlySpend||0
+        })),
+        warnings: (r.warnings||[]).slice(0,6),
+        total_users: r.total_users||0,
+        licensed_users: r.licensed_users||0,
+        dormant_threshold_days: r.dormant_threshold_days||90,
+        sign_in_available: r.sign_in_data_available !== false,
+        imported: !!r.imported,
+        price_as_of: r.priceAsOf || r.price_as_of || '',
+        tenant_name: r.tenant_name || ''
+      };
+    };
+    btn.onclick = async () => {
+      const email = (emailEl.value||'').trim();
+      errEl.textContent = '';
+      if(!emailOk(email)){ errEl.textContent = 'Enter a valid work email.'; emailEl.focus(); return; }
+      btn.disabled = true; btn.textContent = 'Unlocking…';
+      const summary = buildSummary();
+      try{
+        const resp = await fetch(apiBase + '/api/audit/insights', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ email, marketingConsent: !!marketingEl.checked, summary })
+        });
+        const data = await resp.json().catch(()=> ({}));
+        if(!resp.ok){
+          throw new Error(data.error || ('Request failed ('+resp.status+')'));
+        }
+        outEl.textContent = data.reply || 'No insights returned.';
+        outEl.classList.remove('hidden');
+        if(metaEl){
+          const src = data.source === 'llm' ? 'Wanda (AI)' : 'Wanda (deterministic)';
+          const grounded = data.grounded ? 'grounded' : 'not grounded';
+          metaEl.textContent = src + ' · ' + grounded + ' · every $ verified against your totals';
+          metaEl.classList.remove('hidden');
+        }
+        formEl.style.opacity = '0.6';
+        emailEl.disabled = true; marketingEl.disabled = true; btn.textContent = 'Unlocked';
+      }catch(e){
+        errEl.textContent = e.message || 'Could not unlock insights — try again.';
+        btn.disabled = false; btn.textContent = 'Unlock AI insights';
+      }
+    };
+    emailEl.addEventListener('keydown', e => { if(e.key==='Enter'){ e.preventDefault(); btn.click(); } });
+  })();
 }
 
 function exportCsv(r){

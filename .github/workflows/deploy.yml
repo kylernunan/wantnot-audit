@@ -84,16 +84,19 @@ jobs:
       - name: Inject config.js from secret (audit app only)
         env:
           AUDIT_CLIENT_ID: ${{ secrets.AUDIT_CLIENT_ID }}
+          AUDIT_API_BASE: ${{ secrets.AUDIT_API_BASE }}
         run: |
           set -euo pipefail
           if [ -z "${AUDIT_CLIENT_ID:-}" ]; then
             echo "AUDIT_CLIENT_ID not set — leaving placeholder config.js (fork/Dependabot skips deploy)"
           else
+            API_BASE="${AUDIT_API_BASE:-https://func-wantnot-4dc52f.azurewebsites.net}"
             cat > config.js <<JSCONFIG
           /* Generated at deploy — do not commit. WANTNOT_AUDIT_CLIENT_ID is a public identifier, not a secret; this app is a public client with no secret. */
           window.WANTNOT_AUDIT_CLIENT_ID = '${AUDIT_CLIENT_ID}';
+          window.WANTNOT_API_BASE = '${API_BASE}';
           JSCONFIG
-            echo "config.js injected"
+            echo "config.js injected (API base ${API_BASE})"
           fi
           grep -q "WANTNOT_AUDIT_CLIENT_ID" config.js || { echo "::error::config.js missing WANTNOT_AUDIT_CLIENT_ID"; exit 1; }
 

@@ -1,6 +1,6 @@
 {
-  "version": "2026-08",
-  "priceAsOf": "2026-08",
+  "version": "2026-09",
+  "priceAsOf": "2026-09-01",
   "source": "shared/skus.py",
   "skus": {
     "SPE_E3": [
@@ -31,29 +31,53 @@
       "Microsoft 365 F1",
       3.0
     ],
+    "Microsoft_365_F1_EEA_(no_Teams)": [
+      "Microsoft 365 F1 EEA (no Teams)",
+      2.5
+    ],
+    "Microsoft_365_F3_EEA_(no_Teams)": [
+      "Microsoft 365 F3 EEA (no Teams)",
+      8.93
+    ],
     "STANDARDPACK": [
       "Office 365 E1",
       10.0
     ],
     "ENTERPRISEPACK": [
       "Office 365 E3",
-      23.0
+      26.0
     ],
     "ENTERPRISEPREMIUM": [
       "Office 365 E5",
-      38.0
+      41.0
     ],
     "DESKLESSPACK": [
       "Office 365 F3",
       4.0
     ],
+    "Office_365_E1_(no_Teams)": [
+      "Office 365 E1 (no Teams)",
+      6.79
+    ],
+    "Office_365_E3_(no_Teams)": [
+      "Office 365 E3 (no Teams)",
+      17.45
+    ],
+    "Office_365_w/o_Teams_Bundle_E5": [
+      "Office 365 E5 EEA (no Teams)",
+      32.45
+    ],
     "O365_BUSINESS_ESSENTIALS": [
+      "Microsoft 365 Business Basic",
+      7.0
+    ],
+    "SMB_BUSINESS_ESSENTIALS": [
       "Microsoft 365 Business Basic",
       7.0
     ],
     "O365_BUSINESS_PREMIUM": [
       "Microsoft 365 Business Standard",
-      12.5
+      14.0
     ],
     "SPB": [
       "Microsoft 365 Business Premium",
@@ -63,13 +87,41 @@
       "Microsoft 365 Business Basic (no Teams)",
       5.4
     ],
+    "Microsoft_365_Business_Basic_EEA_(no_Teams)": [
+      "Microsoft 365 Business Basic EEA (no Teams)",
+      5.4
+    ],
+    "MICROSOFT_365_BUSINESS_STANDARD_NO_TEAMS": [
+      "Microsoft 365 Business Standard (no Teams)",
+      10.79
+    ],
+    "Microsoft_365_Business_Standard_EEA_(no_Teams)": [
+      "Microsoft 365 Business Standard EEA (no Teams)",
+      10.79
+    ],
+    "Office_365_w/o_Teams_Bundle_Business_Standard": [
+      "Microsoft 365 Business Standard EEA (no Teams)",
+      10.79
+    ],
+    "Microsoft_365_ Business_ Premium_(no Teams)": [
+      "Microsoft 365 Business Premium (no Teams)",
+      18.79
+    ],
+    "Office_365_w/o_Teams_Bundle_Business_Premium": [
+      "Microsoft 365 Business Premium EEA (no Teams)",
+      18.79
+    ],
     "O365_BUSINESS": [
+      "Microsoft 365 Apps for business",
+      10.0
+    ],
+    "SMB_BUSINESS": [
       "Microsoft 365 Apps for business",
       10.0
     ],
     "OFFICESUBSCRIPTION": [
       "Microsoft 365 Apps for enterprise",
-      12.0
+      14.0
     ],
     "EXCHANGESTANDARD": [
       "Exchange Online Plan 1",
@@ -84,44 +136,92 @@
       2.0
     ],
     "AAD_PREMIUM": [
-      "Entra ID P1",
-      6.0
+      "Microsoft Entra ID P1",
+      7.0
     ],
     "AAD_PREMIUM_P2": [
-      "Entra ID P2",
-      9.0
+      "Microsoft Entra ID P2",
+      10.0
     ],
     "EMS": [
       "Enterprise Mobility + Security E3",
-      10.6
+      12.0
     ],
     "EMSPREMIUM": [
       "Enterprise Mobility + Security E5",
-      16.4
+      18.0
     ],
     "IDENTITY_THREAT_PROTECTION": [
-      "Microsoft 365 E5 Security",
+      "Microsoft Defender Suite",
       12.0
     ],
+    "MDE_SMB": [
+      "Microsoft Defender for Business",
+      3.0
+    ],
     "INTUNE_A": [
-      "Intune Plan 1",
+      "Microsoft Intune Plan 1",
       8.0
     ],
+    "Microsoft_Intune_Suite": [
+      "Microsoft Intune Suite",
+      10.0
+    ],
     "ATP_ENTERPRISE": [
-      "Defender for Office 365 P1",
+      "Microsoft Defender for Office 365 Plan 1",
       2.0
     ],
     "THREAT_INTELLIGENCE": [
-      "Defender for Office 365 P2",
+      "Microsoft Defender for Office 365 Plan 2",
       5.0
+    ],
+    "WIN_DEF_ATP": [
+      "Microsoft Defender for Endpoint",
+      5.2
+    ],
+    "RIGHTSMANAGEMENT": [
+      "Azure Information Protection Plan 1",
+      2.0
     ],
     "Microsoft_365_Copilot": [
       "Microsoft 365 Copilot",
       30.0
     ],
     "M365_Copilot": [
-      "Microsoft 365 Copilot",
+      "Microsoft Copilot for Microsoft 365",
       30.0
+    ],
+    "AGENT_365": [
+      "Agent 365",
+      15.0
+    ],
+    "Microsoft_Teams_Enterprise_New": [
+      "Microsoft Teams Enterprise",
+      8.55
+    ],
+    "Teams_Ess": [
+      "Microsoft Teams Essentials",
+      4.0
+    ],
+    "TEAMS_ESSENTIALS_AAD": [
+      "Microsoft Teams Essentials (Microsoft Entra identity)",
+      4.0
+    ],
+    "M365_TEAMS_PREMIUM": [
+      "Microsoft Teams Premium",
+      10.0
+    ],
+    "TEAMS_PREMIUM": [
+      "Microsoft Teams Premium - Legacy (Deprecated)",
+      10.0
+    ],
+    "MCOEV": [
+      "Microsoft Teams Phone Standard",
+      10.0
+    ],
+    "MCOMEETADV": [
+      "Microsoft 365 Audio Conferencing",
+      4.0
     ],
     "POWER_BI_PRO": [
       "Power BI Pro",
@@ -131,16 +231,20 @@
       "Power BI Premium Per User",
       24.0
     ],
+    "PROJECT_P1": [
+      "Microsoft Planner Plan 1",
+      10.0
+    ],
     "PROJECTESSENTIALS": [
-      "Project Plan 1",
+      "Project Online Essentials",
       10.0
     ],
     "PROJECTPROFESSIONAL": [
-      "Project Plan 3",
+      "Planner and Project Plan 3",
       30.0
     ],
     "PROJECTPREMIUM": [
-      "Project Plan 5",
+      "Project Online Premium",
       55.0
     ],
     "VISIOCLIENT": [
@@ -151,36 +255,24 @@
       "Visio Plan 1",
       5.0
     ],
-    "MCOEV": [
-      "Teams Phone Standard",
-      8.0
-    ],
-    "MCOMEETADV": [
-      "Teams Audio Conferencing",
-      4.0
-    ],
     "POWERAUTOMATE_ATTENDED_RPA": [
       "Power Automate Premium",
       15.0
     ],
     "POWERAPPS_PER_USER": [
       "Power Apps Premium",
-      20.0
+      22.0
     ],
-    "WIN_DEF_ATP": [
-      "Defender for Endpoint P2",
-      5.2
-    ],
-    "RIGHTSMANAGEMENT": [
-      "Azure Information Protection P1",
-      2.0
+    "Microsoft_Teams_Audio_Conferencing_select_dial_out": [
+      "Microsoft Teams Audio Conferencing with dial-out to USA/CAN",
+      0.0
     ],
     "FLOW_FREE": [
-      "Power Automate Free",
+      "Microsoft Power Automate Free",
       0.0
     ],
     "POWER_BI_STANDARD": [
-      "Power BI (free)",
+      "Microsoft Fabric (Free)",
       0.0
     ],
     "POWERAPPS_VIRAL": [
@@ -204,7 +296,7 @@
       0.0
     ],
     "TEAMS_FREE": [
-      "Microsoft Teams (free)",
+      "Microsoft Teams (Free)",
       0.0
     ],
     "MS_TEAMS_IW": [
@@ -215,6 +307,88 @@
       "Microsoft Copilot Studio Viral Trial",
       0.0
     ]
+  },
+  "priceStatus": {
+    "SPE_E3": "verified",
+    "SPE_E5": "verified",
+    "MICROSOFT_365_E7": "verified",
+    "Microsoft_365_E3_(no_Teams)": "verified",
+    "Microsoft_365_E5_(no_Teams)": "verified",
+    "SPE_F1": "verified",
+    "M365_F1_COMM": "verified",
+    "Microsoft_365_F1_EEA_(no_Teams)": "verified",
+    "Microsoft_365_F3_EEA_(no_Teams)": "verified",
+    "STANDARDPACK": "verified",
+    "ENTERPRISEPACK": "verified",
+    "ENTERPRISEPREMIUM": "verified",
+    "DESKLESSPACK": "carried_forward",
+    "Office_365_E1_(no_Teams)": "verified",
+    "Office_365_E3_(no_Teams)": "verified",
+    "Office_365_w/o_Teams_Bundle_E5": "verified",
+    "O365_BUSINESS_ESSENTIALS": "verified",
+    "SMB_BUSINESS_ESSENTIALS": "verified",
+    "O365_BUSINESS_PREMIUM": "verified",
+    "SPB": "verified",
+    "Microsoft_365_Business_Basic_(no Teams)": "verified",
+    "Microsoft_365_Business_Basic_EEA_(no_Teams)": "verified",
+    "MICROSOFT_365_BUSINESS_STANDARD_NO_TEAMS": "verified",
+    "Microsoft_365_Business_Standard_EEA_(no_Teams)": "verified",
+    "Office_365_w/o_Teams_Bundle_Business_Standard": "verified",
+    "Microsoft_365_ Business_ Premium_(no Teams)": "verified",
+    "Office_365_w/o_Teams_Bundle_Business_Premium": "verified",
+    "O365_BUSINESS": "verified",
+    "SMB_BUSINESS": "verified",
+    "OFFICESUBSCRIPTION": "verified",
+    "EXCHANGESTANDARD": "verified",
+    "EXCHANGEENTERPRISE": "verified",
+    "EXCHANGEDESKLESS": "carried_forward",
+    "AAD_PREMIUM": "verified",
+    "AAD_PREMIUM_P2": "verified",
+    "EMS": "verified",
+    "EMSPREMIUM": "verified",
+    "IDENTITY_THREAT_PROTECTION": "verified",
+    "MDE_SMB": "verified",
+    "INTUNE_A": "verified",
+    "Microsoft_Intune_Suite": "verified",
+    "ATP_ENTERPRISE": "verified",
+    "THREAT_INTELLIGENCE": "verified",
+    "WIN_DEF_ATP": "carried_forward",
+    "RIGHTSMANAGEMENT": "legacy",
+    "Microsoft_365_Copilot": "verified",
+    "M365_Copilot": "verified",
+    "AGENT_365": "verified",
+    "Microsoft_Teams_Enterprise_New": "verified",
+    "Teams_Ess": "verified",
+    "TEAMS_ESSENTIALS_AAD": "verified",
+    "M365_TEAMS_PREMIUM": "verified",
+    "TEAMS_PREMIUM": "legacy",
+    "MCOEV": "verified",
+    "MCOMEETADV": "carried_forward",
+    "POWER_BI_PRO": "verified",
+    "PBI_PREMIUM_PER_USER": "verified",
+    "PROJECT_P1": "verified",
+    "PROJECTESSENTIALS": "legacy",
+    "PROJECTPROFESSIONAL": "verified",
+    "PROJECTPREMIUM": "legacy",
+    "VISIOCLIENT": "verified",
+    "VISIOONLINE_PLAN1": "verified",
+    "POWERAUTOMATE_ATTENDED_RPA": "verified",
+    "POWERAPPS_PER_USER": "verified",
+    "Microsoft_Teams_Audio_Conferencing_select_dial_out": "zero_cost",
+    "FLOW_FREE": "zero_cost",
+    "POWER_BI_STANDARD": "zero_cost",
+    "POWERAPPS_VIRAL": "zero_cost",
+    "TEAMS_EXPLORATORY": "zero_cost",
+    "WINDOWS_STORE": "zero_cost",
+    "MCOPSTNC": "zero_cost",
+    "STREAM": "zero_cost",
+    "TEAMS_FREE": "zero_cost",
+    "MS_TEAMS_IW": "zero_cost",
+    "CCIBOTS_PRIVPREV_VIRAL": "zero_cost",
+    "Microsoft_Teams_Premium": "unpriced"
+  },
+  "deprecatedSuccessors": {
+    "TEAMS_PREMIUM": "M365_TEAMS_PREMIUM"
   },
   "kinds": {
     "unassigned_seats": [

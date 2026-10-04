@@ -14,3 +14,8 @@ local.settings.json
 config.local.js
 out.json
 *.log
+
+# Browser test dependencies and failure artifacts
+node_modules/
+test-results/
+playwright-report/

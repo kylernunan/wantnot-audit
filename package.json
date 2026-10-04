@@ -1,0 +1,13 @@
+{
+  "name": "wantnot-audit",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Browser contrast checks for the public WantNot audit",
+  "scripts": {
+    "test:contrast": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1",
+    "axe-core": "^4.13.0"
+  }
+}

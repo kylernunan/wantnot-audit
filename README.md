@@ -68,6 +68,20 @@ cp config.js.example config.js
 
 No build step — `skip_app_build: true` in the deploy workflow.
 
+Rendered contrast checks cover the sign-in/import page, an imported CSV report,
+expanded findings, and a selected chart legend in both light and dark themes:
+
+```bash
+npm ci
+npx playwright install chromium
+npm run test:contrast
+```
+
+The test starts a local server with `python3`; set `AUDIT_TEST_PYTHON` to a
+Python executable path if needed. Set `PREVIEW_URL` to check a deployed preview.
+These checks use synthetic CSVs and require no Microsoft sign-in or customer data.
+They gate deployment alongside catalog drift and analyzer parity.
+
 ## Deploying your own copy
 
 1. Create the Entra app (delegated, public client, SPA redirect):

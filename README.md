@@ -2,7 +2,12 @@
 
 Free, **browser-only** Microsoft 365 licence waste audit. Sign in as a Global Reader or Global Admin, get a costed breakdown in about a minute — or import CSV exports from the Microsoft 365 admin centre with no consent at all. **Nothing is stored, anywhere**; directory data goes from Microsoft Graph to this tab and no further.
 
-Live on **`https://audit.wantnot.nunan.com`** (production origin, SWA `swa-wantnot-audit` `brave-ground-0ca79031e.7.azurestaticapps.net`, `CNAME audit → azurestaticapps.net` via the parent panel; `https://wantnot.nunan.com/audit` is a permanent 301 here). The full WantNot product (continuous, multi-tenant, nightly scans, portfolio view) lives at `https://wantnot.nunan.com` — this repo is the free audit only (private repo `kylernunan/wantnot`).
+Live on **`https://audit.wantnot.ebbwater.net/`** (SWA `swa-wantnot-audit`,
+`brave-ground-0ca79031e.7.azurestaticapps.net`). The full WantNot product lives at
+`https://wantnot.ebbwater.net/`; this repo is the free audit only (private product
+repo `kylernunan/wantnot`). Product navigation, brand and privacy links use that
+current origin. The audit's legacy canonical metadata remains part of the separate
+canonical/DNS cutover tracked in WantNot #158; this link repair does not flip it.
 
 **Trust model:** delegated OIDC with PKCE, public client, no secret, three **read-only** delegated scopes. See [Scopes](#scopes) and [Privacy](#privacy).
 
@@ -167,7 +172,7 @@ fixtures/
 - `downgrade_candidate` is backend-only (deferred).
 - Service plans are absent from every admin-centre CSV, so `redundant_sku` cannot be detected from imports.
 - Storage is `westus2` only in the full product — not relevant here (no storage).
-- No SOC 2, no pen test — same posture as the full product; compliance docs live in the private repo (`kylernunan/wantnot:COMPLIANCE.md`, `STATUS.md`, `legal/`). `wantnot.nunan.com/audit → 301` to this origin.
+- No SOC 2, no pen test — same posture as the full product; compliance docs live in the private repo (`kylernunan/wantnot:COMPLIANCE.md`, `STATUS.md`, `legal/`). `https://wantnot.ebbwater.net/audit` redirects to the audit origin.
 
 ---
 
